@@ -16,7 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -51,10 +53,19 @@ fun ActivityTypes(
             LazyColumn(
                 modifier = modifier.fillMaxSize().padding(innerPadding)
             ) {
+                item{
+                    Text(text = activityName,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(start = 16.dp))
+                }
                 items(activities) { activity ->
                     activity.icon = activityObj?.icon ?: R.drawable.ic_main_sport
                     ActivityItem(activity) {
                         navController.navigate("$START_ACTIVITY/${activity}")
+
+
 
                     }
                 }
@@ -62,6 +73,7 @@ fun ActivityTypes(
         } else {
             Box(modifier = modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
                 Text(text = "Loading activities...", fontSize = 20.sp)
+
             }
         }
     }
