@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
+    //id("com.android.application")
 }
 
 android {
@@ -73,6 +75,8 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
     //Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    implementation("com.google.firebase:firebase-analytics")
 
 
 }
