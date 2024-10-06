@@ -11,14 +11,18 @@ import androidx.navigation.navArgument
 import com.example.fitnessproject.Routes
 import com.example.fitnessproject.Routes.ACT_LIST
 import com.example.fitnessproject.Routes.ACT_TYPES
+import com.example.fitnessproject.Routes.START_ACTIVITY
 import com.example.fitnessproject.data.ActivitiesData
 import com.example.fitnessproject.model.Activity
 import com.example.fitnessproject.screen.ActivitiesListScreen
 import com.example.fitnessproject.screen.ActivityTypes
+import com.example.fitnessproject.screen.StartActivityScreen
+import com.example.fitnessproject.viewModel.TimerViewModel
 
 object Routes{
     const val ACT_LIST = "ActivitiesList"
     const val ACT_TYPES = "ActivityType"
+    const val START_ACTIVITY = "StartActivity"
 }
 
 
@@ -38,6 +42,14 @@ fun AppNavHost(modifier: Modifier = Modifier) {
         ) {
             val activity = it.arguments?.getString("activity")
             ActivityTypes(activity!!,navController,modifier = modifier )
+        }
+        composable(
+            route = "$START_ACTIVITY/{activity}",
+            arguments = listOf(
+                navArgument("activity") {type = NavType.StringType} )
+        ) {
+            val activity = it.arguments?.getString("activity")
+            StartActivityScreen(activity!!, TimerViewModel(),modifier = modifier)
         }
     }
 
