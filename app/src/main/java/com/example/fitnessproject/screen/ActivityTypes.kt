@@ -63,7 +63,10 @@ fun ActivityTypes(
                 items(activities) { activity ->
                     activity.icon = activityObj?.icon ?: R.drawable.ic_main_sport
                     ActivityItem(activity) {
+                        navController.popBackStack()
                         navController.navigate("$START_ACTIVITY/${activity}")
+
+
 
 
 

@@ -19,6 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.fitnessproject.Routes
 import com.example.fitnessproject.data.ActivitiesData
 import com.example.fitnessproject.viewModel.TimerViewModel
 import kotlinx.coroutines.delay
@@ -27,6 +30,7 @@ import kotlinx.coroutines.delay
 fun StartActivityScreen(
     activityString: String,
     timerViewModel: TimerViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val activityObj = ActivitiesData().parseActivityFromString(activityString)
@@ -114,8 +118,9 @@ fun StartActivityScreen(
                             .weight(0.5f)
                             .padding(start = 8.dp),
                         onClick = {
-
-
+                            timerViewModel.stopTimer()
+                            navController.popBackStack()
+                            navController.navigate("${Routes.FINISH_ACTIVITY}/${timerValue}/${caloriesBurned}")
                         }
                     ) {
                         Text(text = "Finish",
