@@ -15,4 +15,6 @@ data class Activity(
     @SerializedName("total_calories")
     val totalCalories:Int =0
 
-)
+){
+
+}

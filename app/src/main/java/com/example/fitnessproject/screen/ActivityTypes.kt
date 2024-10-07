@@ -16,13 +16,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
 import com.example.fitnessproject.Routes.ACT_TYPES
+import com.example.fitnessproject.Routes.START_ACTIVITY
 import com.example.fitnessproject.activityApi.ActivityCallable
+import com.example.fitnessproject.data.ActivitiesData
 import com.example.fitnessproject.model.Activity
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,7 +41,7 @@ fun ActivityTypes(
     modifier: Modifier = Modifier
 ) {
     var activities by remember { mutableStateOf(listOf<Activity>()) }
-    val activityObj = parseActivityFromString(activityString)
+    val activityObj = ActivitiesData().parseActivityFromString(activityString)
     val activityName = activityObj?.name ?: ""
     LaunchedEffect(activityName) {
         loadActivityTypes(activityName) {
@@ -49,9 +53,22 @@ fun ActivityTypes(
             LazyColumn(
                 modifier = modifier.fillMaxSize().padding(innerPadding)
             ) {
+                item{
+                    Text(text = activityName,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(start = 16.dp))
+                }
                 items(activities) { activity ->
                     activity.icon = activityObj?.icon ?: R.drawable.ic_main_sport
                     ActivityItem(activity) {
+                        navController.popBackStack()
+                        navController.navigate("$START_ACTIVITY/${activity}")
+
+
+
+
 
                     }
                 }
@@ -59,6 +76,7 @@ fun ActivityTypes(
         } else {
             Box(modifier = modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
                 Text(text = "Loading activities...", fontSize = 20.sp)
+
             }
         }
     }
@@ -95,20 +113,3 @@ fun loadActivityTypes(activityName: String, callback: (List<Activity>) -> Unit) 
     })
 }
 
-fun parseActivityFromString(activityString: String): Activity? {
-    val regex = """Activity\(name=(.*?), icon=(\d+), caloriesPerHour=(\d+), duration=(\d+), totalCalories=(\d+)\)""".toRegex()
-    val matchResult = regex.find(activityString)
-
-    return if (matchResult != null) {
-        val (name, icon, caloriesPerHour, duration, totalCalories) = matchResult.destructured
-        Activity(
-            name = name,
-            icon = icon.toInt(),
-            caloriesPerHour = caloriesPerHour.toInt(),
-            duration = duration.toInt(),
-            totalCalories = totalCalories.toInt()
-        )
-    } else {
-        null
-    }
-}
