@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.fitnessproject.caloriecalculator.AppNavigation
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Modifier
 import com.example.fitnessproject.ui.theme.FitnessProjectTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,8 +16,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FitnessProjectTheme {
-                AppNavigation()
+                Scaffold(modifier = Modifier.fillMaxSize()) {innerPadding->
+                    AppNavHost(modifier = Modifier
+                        .padding(innerPadding))
+                }
             }
         }
     }
 }
+

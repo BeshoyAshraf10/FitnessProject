@@ -68,4 +68,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.8.2")
+    //Retrofit
+    implementation(libs.retrofit)
+    //Gson Converter
+    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
+    //Kotlin Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+
 }
