@@ -1,4 +1,4 @@
-package com.example.fitnessproject.screen
+package com.example.fitnessproject.screen.Activities
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
