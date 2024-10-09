@@ -1,4 +1,4 @@
-package com.example.fitnessproject.caloriecalculator
+package com.example.fitnessproject.screen.calorieCalculator
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

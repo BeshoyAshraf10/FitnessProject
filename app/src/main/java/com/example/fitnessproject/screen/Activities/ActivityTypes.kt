@@ -1,4 +1,4 @@
-package com.example.fitnessproject.screen
+package com.example.fitnessproject.screen.Activities
 
 import android.util.Log
 import androidx.compose.foundation.layout.Box
@@ -23,9 +23,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
-import com.example.fitnessproject.Routes.ACT_TYPES
-import com.example.fitnessproject.Routes.START_ACTIVITY
 import com.example.fitnessproject.activityApi.ActivityCallable
+import com.example.fitnessproject.Routes
 import com.example.fitnessproject.data.ActivitiesData
 import com.example.fitnessproject.model.Activity
 import retrofit2.Call
@@ -51,7 +50,9 @@ fun ActivityTypes(
     Scaffold (modifier = Modifier.fillMaxSize()){innerPadding ->
         if (activities.isNotEmpty()) {
             LazyColumn(
-                modifier = modifier.fillMaxSize().padding(innerPadding)
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
             ) {
                 item{
                     Text(text = activityName,
@@ -64,7 +65,7 @@ fun ActivityTypes(
                     activity.icon = activityObj?.icon ?: R.drawable.ic_main_sport
                     ActivityItem(activity) {
                         navController.popBackStack()
-                        navController.navigate("$START_ACTIVITY/${activity}")
+                        navController.navigate("${Routes.START_ACTIVITY}/${activity}")
 
 
 
@@ -74,7 +75,9 @@ fun ActivityTypes(
                 }
             }
         } else {
-            Box(modifier = modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
+            Box(modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding), contentAlignment = Alignment.Center) {
                 Text(text = "Loading activities...", fontSize = 20.sp)
 
             }

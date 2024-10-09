@@ -1,10 +1,7 @@
-package com.example.fitnessproject.screen
+package com.example.fitnessproject.screen.Activities
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,11 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.fitnessproject.R
+import com.example.fitnessproject.Routes
 import com.example.fitnessproject.data.ActivitiesData
 import com.example.fitnessproject.model.Activity
-import com.example.fitnessproject.Routes.ACT_LIST
-import com.example.fitnessproject.Routes.ACT_TYPES
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -65,7 +59,7 @@ fun ActivitiesListScreen(
             }
             items(activities) { activity: Activity ->
                 ActivityItem(activity) {
-                    navController.navigate("$ACT_TYPES/$activity")
+                    navController.navigate("${Routes.ACT_TYPES}/$activity")
                 }
             }
         }

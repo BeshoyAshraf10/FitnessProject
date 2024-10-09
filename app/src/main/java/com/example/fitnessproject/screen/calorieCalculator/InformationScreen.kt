@@ -1,4 +1,4 @@
-package com.example.fitnessproject.caloriecalculator
+package com.example.fitnessproject.screen.calorieCalculator
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
+import com.example.fitnessproject.Routes
 import com.example.fitnessproject.ui.theme.TDEEBabyBlue
 import com.example.fitnessproject.ui.theme.TDEEBlue
 
