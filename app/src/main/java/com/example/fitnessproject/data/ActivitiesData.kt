@@ -6,16 +6,16 @@ import com.example.fitnessproject.model.Activity
 class ActivitiesData {
 
     fun getActivitiesNames() = listOf(
-        Activity("Football", R.drawable.ic_soccer),
-        Activity("Basketball", R.drawable.ic_basketball),
-        Activity("Cricket", R.drawable.ic_cricket),
-        Activity("Tennis", R.drawable.ic_tennis),
-        Activity("Running", R.drawable.ic_running),
-        Activity("Walking", R.drawable.ic_walking),
-        Activity("Cycling", R.drawable.ic_cycling),
-        Activity("Hiking", R.drawable.ic_hiking),
-        Activity("Swimming", R.drawable.ic_swimming),
-        Activity("Weight Lifting", R.drawable.ic_weight)
+        Activity(name = "Football", icon = R.drawable.ic_soccer),
+        Activity(name = "Basketball",icon = R.drawable.ic_basketball),
+        Activity(name = "Cricket", icon =R.drawable.ic_cricket),
+        Activity(name = "Tennis",icon = R.drawable.ic_tennis),
+        Activity(name = "Running",icon = R.drawable.ic_running),
+        Activity(name = "Walking",icon = R.drawable.ic_walking),
+        Activity(name = "Cycling",icon = R.drawable.ic_cycling),
+        Activity(name = "Hiking", icon =R.drawable.ic_hiking),
+        Activity(name = "Swimming",icon = R.drawable.ic_swimming),
+        Activity(name = "Weight Lifting",icon = R.drawable.ic_weight)
     )
 
     fun parseActivityFromString(activityString: String): Activity? {

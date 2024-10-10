@@ -2,6 +2,7 @@ package com.example.fitnessproject
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,6 +15,7 @@ import com.example.fitnessproject.screen.calorieCalculator.CalorieCalculatorScre
 import com.example.fitnessproject.screen.Activities.FinishActivityScreen
 import com.example.fitnessproject.screen.calorieCalculator.InformationScreen
 import com.example.fitnessproject.screen.Activities.StartActivityScreen
+import com.example.fitnessproject.viewModel.ActivityViewModel
 import com.example.fitnessproject.viewModel.TimerViewModel
 
 object Routes {
@@ -26,10 +28,11 @@ object Routes {
 }
 
 @Composable
-fun AppNavHost(modifier: Modifier = Modifier) {
+fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewModel = viewModel()) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Routes.FIRST_SCREEN) {
+
+    NavHost(navController = navController, startDestination = Routes.ACT_LIST) {
         composable(Routes.FIRST_SCREEN) {
             InformationScreen(navController)
         }
@@ -53,31 +56,40 @@ fun AppNavHost(modifier: Modifier = Modifier) {
             modifier = modifier
         ) }
         composable(
-            route = "$Routes.ACT_TYPES/{activity}",
+            route = "${Routes.ACT_TYPES}/{activity}",
             arguments = listOf(
                 navArgument("activity") {type = NavType.StringType} )
         ) {
             val activity = it.arguments?.getString("activity")
-            ActivityTypes(activity!!,navController,modifier = modifier )
+            ActivityTypes(activity!!,navController,modifier = modifier,activityViewModel = activityViewModel)
         }
+//        composable(
+//            route = "$Routes.START_ACTIVITY/{activity}",
+//            arguments = listOf(
+//                navArgument("activity") {type = NavType.StringType} )
+//        ) {
+//            val activity = it.arguments?.getString("activity")
+//            StartActivityScreen(activity!!, TimerViewModel(),navController,modifier = modifier)
+//        }
         composable(
-            route = "$Routes.START_ACTIVITY/{activity}",
-            arguments = listOf(
-                navArgument("activity") {type = NavType.StringType} )
+            route = Routes.START_ACTIVITY,
         ) {
-            val activity = it.arguments?.getString("activity")
-            StartActivityScreen(activity!!, TimerViewModel(),navController,modifier = modifier)
+            StartActivityScreen( TimerViewModel(),navController,modifier = modifier,activityViewModel = activityViewModel)
         }
         composable(
-            route = "$Routes.FINISH_ACTIVITY/{time}/{calories}",
+            route = "${Routes.FINISH_ACTIVITY}/{time}/{calories}/{timeStarted}/{timeEnded}",
             arguments = listOf(
                 navArgument("time") {type = NavType.LongType},
-                navArgument("calories") {type = NavType.IntType}
+                navArgument("calories") {type = NavType.IntType},
+                navArgument("timeStarted") {type = NavType.LongType},
+                navArgument("timeEnded") {type = NavType.LongType}
             )
         ){
             val time = it.arguments?.getLong("time")
             val calories = it.arguments?.getInt("calories")
-            FinishActivityScreen(time!!,calories!!,navController,modifier = modifier)
+            val timeStarted = it.arguments?.getLong("timeStarted")
+            val timeEnded = it.arguments?.getLong("timeEnded")
+            FinishActivityScreen(time!!,calories!!,timeStarted!!,timeEnded!!,navController,modifier = modifier,activityViewModel = activityViewModel)
         }
     }
 }

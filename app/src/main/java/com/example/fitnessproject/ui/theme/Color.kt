@@ -11,5 +11,5 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val TDEEBlue =Color(0XFF1367c1)
-val  TDEEGray =Color(0XFF98a2ac)
+val TDEEGray =Color(0XFF98a2ac)
 val TDEEBabyBlue=Color(0XFFf3f8fc)

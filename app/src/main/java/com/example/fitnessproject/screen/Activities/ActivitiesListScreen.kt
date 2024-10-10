@@ -59,7 +59,8 @@ fun ActivitiesListScreen(
             }
             items(activities) { activity: Activity ->
                 ActivityItem(activity) {
-                    navController.navigate("${Routes.ACT_TYPES}/$activity")
+                    navController.navigate("${Routes.ACT_TYPES}/${activity.name}")
+//                    navController.navigate(Routes.FIRST_SCREEN)
                 }
             }
         }
