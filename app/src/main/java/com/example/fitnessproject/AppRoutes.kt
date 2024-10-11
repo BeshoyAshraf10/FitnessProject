@@ -15,10 +15,12 @@ import com.example.fitnessproject.screen.calorieCalculator.CalorieCalculatorScre
 import com.example.fitnessproject.screen.Activities.FinishActivityScreen
 import com.example.fitnessproject.screen.calorieCalculator.InformationScreen
 import com.example.fitnessproject.screen.Activities.StartActivityScreen
+import com.example.fitnessproject.screen.home.HomeScreen
 import com.example.fitnessproject.viewModel.ActivityViewModel
 import com.example.fitnessproject.viewModel.TimerViewModel
 
 object Routes {
+    const val HOME_SCREEN = "home"
     const val FIRST_SCREEN = "first_screen"
     const val SECOND_SCREEN = "second_screen"
     const val ACT_LIST = "ActivitiesList"
@@ -32,7 +34,10 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = Routes.ACT_LIST) {
+    NavHost(navController = navController, startDestination = Routes.HOME_SCREEN) {
+        composable(Routes.HOME_SCREEN){
+            HomeScreen(navController)
+        }
         composable(Routes.FIRST_SCREEN) {
             InformationScreen(navController)
         }
@@ -56,21 +61,17 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
             modifier = modifier
         ) }
         composable(
-            route = "${Routes.ACT_TYPES}/{activity}",
+            route = "${Routes.ACT_TYPES}/{activity}/{icon}",
             arguments = listOf(
-                navArgument("activity") {type = NavType.StringType} )
+                navArgument("activity") {type = NavType.StringType},
+                navArgument("icon") {type = NavType.IntType}
+            )
         ) {
             val activity = it.arguments?.getString("activity")
-            ActivityTypes(activity!!,navController,modifier = modifier,activityViewModel = activityViewModel)
+            val icon = it.arguments?.getInt("icon")
+            ActivityTypes(activity!!,icon!!,navController,modifier = modifier,activityViewModel = activityViewModel)
         }
-//        composable(
-//            route = "$Routes.START_ACTIVITY/{activity}",
-//            arguments = listOf(
-//                navArgument("activity") {type = NavType.StringType} )
-//        ) {
-//            val activity = it.arguments?.getString("activity")
-//            StartActivityScreen(activity!!, TimerViewModel(),navController,modifier = modifier)
-//        }
+//
         composable(
             route = Routes.START_ACTIVITY,
         ) {

@@ -59,7 +59,7 @@ fun ActivitiesListScreen(
             }
             items(activities) { activity: Activity ->
                 ActivityItem(activity) {
-                    navController.navigate("${Routes.ACT_TYPES}/${activity.name}")
+                    navController.navigate("${Routes.ACT_TYPES}/${activity.name}/${activity.icon}")
 //                    navController.navigate(Routes.FIRST_SCREEN)
                 }
             }
@@ -73,6 +73,7 @@ fun ActivitiesListScreen(
 @Composable
 fun ActivityItem(activity: Activity, modifier: Modifier = Modifier, onNavigate: () -> Unit) {
     val context = LocalContext.current
+
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp)
@@ -81,6 +82,7 @@ fun ActivityItem(activity: Activity, modifier: Modifier = Modifier, onNavigate: 
             }
     ) {
         Row(
+
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()

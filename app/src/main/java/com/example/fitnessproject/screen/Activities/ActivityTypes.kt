@@ -38,6 +38,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Composable
 fun ActivityTypes(
     activityName: String,
+    icon: Int,
     navController: NavController,
     modifier: Modifier = Modifier,
     activityViewModel: ActivityViewModel = viewModel()
@@ -66,7 +67,7 @@ fun ActivityTypes(
                         .padding(start = 16.dp))
                 }
                 items(activities) { activity ->
-                    activity.icon = R.drawable.ic_main_sport
+                    activity.icon = icon
                     ActivityItem(activity) {
                         activityViewModel.selectActivity(activity)
                         navController.popBackStack()
@@ -94,7 +95,7 @@ fun ActivityTypes(
 @Preview(showSystemUi = true)
 @Composable
 private fun ActivityTypesPrev() {
-    ActivityTypes("running", rememberNavController())
+//    ActivityTypes("running", rememberNavController())
 }
 
 fun loadActivityTypes(activityName: String, callback: (List<Activity>) -> Unit) {
