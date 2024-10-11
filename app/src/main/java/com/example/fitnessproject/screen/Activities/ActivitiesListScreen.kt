@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.fitnessproject.Routes
+import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.data.ActivitiesData
 import com.example.fitnessproject.model.Activity
 

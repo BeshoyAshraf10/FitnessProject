@@ -22,11 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.fitnessproject.R
 import com.example.fitnessproject.activityApi.ActivityCallable
-import com.example.fitnessproject.Routes
-import com.example.fitnessproject.data.ActivitiesData
+import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.model.Activity
 import com.example.fitnessproject.viewModel.ActivityViewModel
 import retrofit2.Call

@@ -1,4 +1,4 @@
-package com.example.fitnessproject
+package com.example.fitnessproject.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,12 +15,16 @@ import com.example.fitnessproject.screen.calorieCalculator.CalorieCalculatorScre
 import com.example.fitnessproject.screen.Activities.FinishActivityScreen
 import com.example.fitnessproject.screen.calorieCalculator.InformationScreen
 import com.example.fitnessproject.screen.Activities.StartActivityScreen
+import com.example.fitnessproject.screen.LoginScreen
+import com.example.fitnessproject.screen.SignUpScreen
 import com.example.fitnessproject.screen.home.HomeScreen
 import com.example.fitnessproject.viewModel.ActivityViewModel
 import com.example.fitnessproject.viewModel.TimerViewModel
 
 object Routes {
     const val HOME_SCREEN = "home"
+    const val LOGIN = "login_screen"
+    const val SIGNUP = "signUp_screen"
     const val FIRST_SCREEN = "first_screen"
     const val SECOND_SCREEN = "second_screen"
     const val ACT_LIST = "ActivitiesList"
@@ -35,6 +39,12 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
 
 
     NavHost(navController = navController, startDestination = Routes.HOME_SCREEN) {
+        composable(Routes.LOGIN) {
+            LoginScreen()
+        }
+        composable(Routes.SIGNUP) {
+            SignUpScreen()
+        }
         composable(Routes.HOME_SCREEN){
             HomeScreen(navController)
         }

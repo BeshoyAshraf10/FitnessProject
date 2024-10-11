@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.fitnessproject.Routes
-import com.example.fitnessproject.data.ActivitiesData
+import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.localDB.DateConverter
 import com.example.fitnessproject.viewModel.ActivityViewModel
 import com.example.fitnessproject.viewModel.TimerViewModel
