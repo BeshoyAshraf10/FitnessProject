@@ -1,5 +1,7 @@
 package com.example.fitnessproject.screen.Activities
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,14 +18,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.fitnessproject.localDB.DateConverter
+import com.example.fitnessproject.viewModel.ActivityViewModel
 
 @Composable
 fun FinishActivityScreen(
     timerValue: Long,
     caloriesBurned: Int,
+    timeStarted: Long,
+    timeEnded: Long,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    activityViewModel: ActivityViewModel = viewModel()
 ) {
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -86,6 +94,13 @@ fun FinishActivityScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 80.dp),
                     onClick = {
+                        saveActivitySession(
+                            activityViewModel,
+                            timeStarted,
+                            timeEnded,
+                            timerValue,
+                            caloriesBurned
+                        )
                         navController.popBackStack()
                     }
                 ) {
@@ -100,6 +115,31 @@ fun FinishActivityScreen(
 
         }
 
+    }
+
+}
+
+
+fun saveActivitySession(
+    viewModel: ActivityViewModel,
+    timeStarted: Long,
+    timeEnded: Long,
+    timerValue: Long,
+    caloriesBurned: Int
+) {
+
+    try {
+        val currentAct = viewModel.selectedActivity
+        currentAct?.timeStarted = DateConverter().fromTimestamp(timeStarted)!!
+        currentAct?.timeEnded = DateConverter().fromTimestamp(timeEnded)!!
+        currentAct?.durationTaken = timerValue
+        currentAct?.caloriesBurned = caloriesBurned
+        viewModel.upsertActivity(currentAct!!)
+        Toast.makeText(viewModel.getApplication(), "Activity Saved!", Toast.LENGTH_LONG).show()
+    } catch (e: Exception) {
+        Toast.makeText(viewModel.getApplication(), "Error Saving Activity!", Toast.LENGTH_LONG)
+            .show()
+        Log.d("error", e.toString())
     }
 
 }

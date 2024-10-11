@@ -1,5 +1,6 @@
 package com.example.fitnessproject.screen.Activities
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,20 +18,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fitnessproject.Routes
 import com.example.fitnessproject.data.ActivitiesData
+import com.example.fitnessproject.localDB.DateConverter
+import com.example.fitnessproject.viewModel.ActivityViewModel
 import com.example.fitnessproject.viewModel.TimerViewModel
+import java.util.Date
 
 @Composable
 fun StartActivityScreen(
-    activityString: String,
     timerViewModel: TimerViewModel,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    activityViewModel: ActivityViewModel = viewModel()
 ) {
-    val activityObj = ActivitiesData().parseActivityFromString(activityString)
+    Log.d("trace", "Activity obj: ${activityViewModel.selectedActivity}")
+    val activityObj = activityViewModel.selectedActivity
     val timerValue by timerViewModel.timer.collectAsState()
+    var timeStarted by remember { mutableStateOf(Date()) }
+    var timeEnded by remember { mutableStateOf(Date()) }
     var isStarted by remember { mutableStateOf(false) }
     var isPaused by remember { mutableStateOf(false) }
     var caloriesPerSecond by remember { mutableStateOf(calculateCaloriesPerSecond(activityObj!!.caloriesPerHour)) }
@@ -40,6 +48,7 @@ fun StartActivityScreen(
     }
 
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
+
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
@@ -114,9 +123,10 @@ fun StartActivityScreen(
                             .weight(0.5f)
                             .padding(start = 8.dp),
                         onClick = {
+                            timeEnded = Date()
                             timerViewModel.stopTimer()
                             navController.popBackStack()
-                            navController.navigate("${Routes.FINISH_ACTIVITY}/${timerValue}/${caloriesBurned}")
+                            navController.navigate("${Routes.FINISH_ACTIVITY}/${timerValue}/${caloriesBurned}/${DateConverter().dateToTimestamp(timeStarted)}/${DateConverter().dateToTimestamp(timeEnded)}")
                         }
                     ) {
                         Text(text = "Finish",

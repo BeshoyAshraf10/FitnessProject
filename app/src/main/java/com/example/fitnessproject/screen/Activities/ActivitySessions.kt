@@ -1,88 +1,51 @@
-package com.example.fitnessproject.screen.Activities
+package com.example.fitnessproject.screen.activities
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.fitnessproject.Routes
-import com.example.fitnessproject.data.ActivitiesData
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fitnessproject.R
 import com.example.fitnessproject.model.Activity
+import com.example.fitnessproject.viewModel.ActivityViewModel
+import java.util.Date
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ActivitiesListScreen(
-    activities: List<Activity>,
-    navController: NavController,
+fun ActivitySessionItem(
+//    activityViewModel: ActivityViewModel,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        LazyColumn(
-            modifier = modifier
-                .padding(innerPadding)
-        ) {
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp)
-                ) {
-                    Text(
-                        text = "Activities",
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                    )
-                }
-            }
-            items(activities) { activity: Activity ->
-                ActivityItem(activity) {
-                    navController.navigate("${Routes.ACT_TYPES}/${activity.name}/${activity.icon}")
-//                    navController.navigate(Routes.FIRST_SCREEN)
-                }
-            }
-        }
-    }
-
-
-}
-
-
-@Composable
-fun ActivityItem(activity: Activity, modifier: Modifier = Modifier, onNavigate: () -> Unit) {
-    val context = LocalContext.current
-
+    val activity = Activity(
+        id = 0, // Since the ID is auto-generated
+        name = "Running, 5 mph (12 minute mile)",
+        icon = R.drawable.ic_main_sport, // Assuming this is a valid drawable resource ID
+        caloriesPerHour = 581,
+        duration = 60,
+        totalCalories = 581,
+        durationTaken = 60L, // Duration in seconds (1 minute)
+        caloriesBurned = 9,
+        timeStarted = Date(1728582694110), // Time started
+        timeEnded = Date(1728582755920)    // Time ended
+    )
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp)
-            .clickable {
-                onNavigate()
-            }
     ) {
         Row(
-
             verticalAlignment = Alignment.CenterVertically,
             modifier = modifier
                 .fillMaxWidth()
@@ -107,7 +70,7 @@ fun ActivityItem(activity: Activity, modifier: Modifier = Modifier, onNavigate: 
                         .padding(start = 16.dp)
 
                 )
-                if(activity.caloriesPerHour != 0){
+
                     Text(
                         text = "${activity.caloriesPerHour.toString()} cal/hour",
                         fontSize = 16.sp,
@@ -116,7 +79,7 @@ fun ActivityItem(activity: Activity, modifier: Modifier = Modifier, onNavigate: 
 
                     )
                 }
-            }
+            
         }
         HorizontalDivider(
             color = Color.Black,
@@ -126,12 +89,15 @@ fun ActivityItem(activity: Activity, modifier: Modifier = Modifier, onNavigate: 
 
         )
     }
+}
+
+@Composable
+fun ActivitySessionList(modifier: Modifier = Modifier) {
 
 }
 
-
-@Preview(showSystemUi = true, showBackground = false)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun ActivityCardPreview() {
-    ActivitiesListScreen(ActivitiesData().getActivitiesNames(), rememberNavController())
+private fun ActivitySessionListPrev() {
+    ActivitySessionItem()
 }
