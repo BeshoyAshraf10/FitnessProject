@@ -1,5 +1,7 @@
 package com.example.fitnessproject.screen.home
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,12 +16,18 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
 
 val selectedColor: Color = Color.White
@@ -33,8 +41,8 @@ data class BottomNavigationItem(
 
 // Main home screen composable
 @Composable
-fun HomeScreen() {
-    var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
+fun HomeScreen(navController: NavController) {
+    var selectedItemIndex by rememberSaveable { mutableStateOf(1) }
 
     Scaffold(
         bottomBar = {
@@ -132,6 +140,35 @@ fun CardItem(title: String, imageRes: Int, screenWidth: Dp) {
     ) {
         Box {
             // Your image and title layout
+            Image(
+                painter = painterResource(id = imageRes),
+                contentDescription = title,
+                modifier = Modifier
+                    .fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White,
+                    modifier = Modifier
+                        .background(Color(0x40000000))
+                )
+            }
         }
     }
+}
+
+@Preview
+@Composable
+private fun HomePrev() {
+    HomeScreen(rememberNavController())
+
 }
