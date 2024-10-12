@@ -19,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
 import com.example.fitnessproject.model.Activity
 import com.example.fitnessproject.viewModel.ActivityViewModel
@@ -27,6 +29,7 @@ import java.util.Date
 @Composable
 fun ActivitySessionItem(
 //    activityViewModel: ActivityViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val activity = Activity(
@@ -99,5 +102,5 @@ fun ActivitySessionList(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun ActivitySessionListPrev() {
-    ActivitySessionItem()
+    ActivitySessionItem(rememberNavController())
 }

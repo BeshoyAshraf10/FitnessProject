@@ -34,9 +34,6 @@ import com.example.fitnessproject.navigation.Routes
 
 val selectedColor: Color = Color.White
 
-
-
-// Main home screen composable
 @Composable
 fun HomeScreen(navController: NavController) {
     var selectedItemIndex by rememberSaveable { mutableStateOf(1) }
@@ -63,20 +60,24 @@ fun HomeScreen(navController: NavController) {
                 .padding(horizontal = 16.dp, vertical = 20.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            CardItem(title = "Steps", imageRes = R.drawable.steps, screenWidth){
+            CardItem(title = "Steps", imageRes = R.drawable.steps, screenWidth) {
 
             }
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Activities", imageRes = R.drawable.activities, screenWidth){
-navController.navigate(Routes.ACT_LIST)
+            CardItem(title = "Activities", imageRes = R.drawable.activities, screenWidth) {
+                navController.navigate(Routes.ACT_SESSIONS)
             }
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Calories & Nutrition", imageRes = R.drawable.nutritionjpg, screenWidth){
+            CardItem(
+                title = "Calories & Nutrition",
+                imageRes = R.drawable.nutritionjpg,
+                screenWidth
+            ) {
 
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Update Weight", imageRes = R.drawable.weight, screenWidth){
+            CardItem(title = "Update Weight", imageRes = R.drawable.weight, screenWidth) {
 
             }
         }
@@ -86,10 +87,9 @@ navController.navigate(Routes.ACT_LIST)
 // Bottom navigation bar composable with the list embedded
 
 
-
 // CardItem remains the same
 @Composable
-fun CardItem(title: String, imageRes: Int, screenWidth: Dp,onNavigate: () -> Unit) {
+fun CardItem(title: String, imageRes: Int, screenWidth: Dp, onNavigate: () -> Unit) {
     val cardHeight = screenWidth * 0.4f
     Card(
         modifier = Modifier
