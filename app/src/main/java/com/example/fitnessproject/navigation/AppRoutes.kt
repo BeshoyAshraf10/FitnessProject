@@ -18,11 +18,13 @@ import com.example.fitnessproject.screen.Activities.StartActivityScreen
 import com.example.fitnessproject.screen.LoginScreen
 import com.example.fitnessproject.screen.SignUpScreen
 import com.example.fitnessproject.screen.home.HomeScreen
+import com.example.fitnessproject.screen.profile.ProfileScreen
 import com.example.fitnessproject.viewModel.ActivityViewModel
 import com.example.fitnessproject.viewModel.TimerViewModel
 
 object Routes {
     const val HOME_SCREEN = "home"
+    const val PROFILE_SCREEN = "profile"
     const val LOGIN = "login_screen"
     const val SIGNUP = "signUp_screen"
     const val FIRST_SCREEN = "first_screen"
@@ -38,7 +40,7 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = Routes.LOGIN) {
+    NavHost(navController = navController, startDestination = Routes.PROFILE_SCREEN) {
         composable(Routes.LOGIN) {
             LoginScreen(navController)
         }
@@ -48,6 +50,10 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
         composable(Routes.HOME_SCREEN){
             HomeScreen(navController)
         }
+        composable(Routes.PROFILE_SCREEN){
+            ProfileScreen()
+        }
+
         composable(Routes.FIRST_SCREEN) {
             InformationScreen(navController)
         }

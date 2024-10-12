@@ -173,6 +173,5 @@ class SignupViewModel : ViewModel() {
                 Log.d(TAG, "Exception= ${e.message}")
                 signUpError.value = e.message.toString()
             }
-
     }
 }

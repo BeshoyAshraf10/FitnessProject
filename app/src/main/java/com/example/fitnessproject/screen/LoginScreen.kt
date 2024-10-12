@@ -47,6 +47,15 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
         }
 
     }
+    LaunchedEffect (loginViewModel.isForgetPassEmailSent.value){
+        if (loginViewModel.isForgetPassEmailSent.value) {
+            Toast.makeText(
+                context,
+                "Email sent successfully",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -86,7 +95,9 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
-                UnderLinedTextComponent(value = stringResource(id = R.string.forgot_password))
+                UnderLinedTextComponent(value = stringResource(id = R.string.forgot_password)){
+                    loginViewModel.onEvent(LoginUIEvent.ForgotPasswordClicked)
+                }
 
                 Spacer(modifier = Modifier.height(40.dp))
 

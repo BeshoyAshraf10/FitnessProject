@@ -30,6 +30,7 @@ import androidx.compose.material3.OutlinedTextField
 //import androidx.compose.material.icons.filled.Visibility
 //import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults.outlinedTextFieldColors
 import androidx.compose.material3.TopAppBar
@@ -379,20 +380,24 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
 }
 
 @Composable
-fun UnderLinedTextComponent(value: String) {
-    Text(
-        text = value,
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = 40.dp),
-        style = TextStyle(
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal,
-            fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.colorGray),
-        textAlign = TextAlign.Center,
-        textDecoration = TextDecoration.Underline
-    )
+fun UnderLinedTextComponent(value: String, onTextSelected: () -> Unit) {
+    TextButton(onClick = {
+        onTextSelected()
+    }) {
+        Text(
+            text = value,
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 40.dp),
+            style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Normal
+            ), color = colorResource(id = R.color.colorGray),
+            textAlign = TextAlign.Center,
+            textDecoration = TextDecoration.Underline
+        )
+    }
 
 }
 
@@ -480,7 +485,8 @@ fun NavigationItemRow(item: NavigationItem,
             .fillMaxWidth()
             .clickable {
                 onNavigationItemClicked.invoke(item)
-            }.padding(all = 16.dp)
+            }
+            .padding(all = 16.dp)
     ) {
 
         Icon(
