@@ -29,15 +29,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
+import com.example.fitnessproject.components.BottomNavigationBar
+import com.example.fitnessproject.navigation.Routes
 
 val selectedColor: Color = Color.White
 
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-)
+
 
 // Main home screen composable
 @Composable
@@ -48,7 +45,10 @@ fun HomeScreen(navController: NavController) {
         bottomBar = {
             BottomNavigationBar(
                 selectedItemIndex = selectedItemIndex,
-                onItemSelected = { selectedItemIndex = it }
+                onItemSelected = {
+                    selectedItemIndex = it
+                },
+                navController = navController
             )
         }
     ) { innerPadding ->
@@ -68,7 +68,7 @@ fun HomeScreen(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(16.dp))
             CardItem(title = "Activities", imageRes = R.drawable.activities, screenWidth){
-
+navController.navigate(Routes.ACT_LIST)
             }
             Spacer(modifier = Modifier.height(16.dp))
             CardItem(title = "Calories & Nutrition", imageRes = R.drawable.nutritionjpg, screenWidth){
@@ -84,55 +84,8 @@ fun HomeScreen(navController: NavController) {
 }
 
 // Bottom navigation bar composable with the list embedded
-@Composable
-fun BottomNavigationBar(
-    selectedItemIndex: Int,
-    onItemSelected: (Int) -> Unit
-) {
-    val items = listOf(
-        BottomNavigationItem(
-            title = "Exercises",
-            selectedIcon = Icons.Filled.DateRange,
-            unselectedIcon = Icons.Outlined.DateRange,
-            hasNews = false
-        ),
-        BottomNavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-            hasNews = false
-        ),
-        BottomNavigationItem(
-            title = "Profile",
-            selectedIcon = Icons.Filled.Person,
-            unselectedIcon = Icons.Outlined.Person,
-            hasNews = false
-        ),
-    )
 
-    NavigationBar(
-        modifier = Modifier.height(110.dp),
-        containerColor = Color.White,
-        contentColor = Color.Blue
-    ) {
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        if (index == selectedItemIndex) item.selectedIcon else item.unselectedIcon,
-                        contentDescription = item.title
-                    )
-                },
-                label = { Text(item.title) },
-                selected = index == selectedItemIndex,
-                onClick = { onItemSelected(index) },
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = selectedColor
-                )
-            )
-        }
-    }
-}
+
 
 // CardItem remains the same
 @Composable

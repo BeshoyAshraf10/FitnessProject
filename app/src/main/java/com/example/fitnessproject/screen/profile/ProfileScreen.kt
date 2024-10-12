@@ -30,12 +30,14 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +52,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.fitnessproject.components.BottomNavigationBar
 import com.example.fitnessproject.ui.theme.GradientEnd
 import com.example.fitnessproject.ui.theme.GradientStart
 import com.example.fitnessproject.ui.theme.Gray
@@ -59,7 +63,7 @@ import com.example.fitnessproject.ui.theme.White
 
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var userName by remember { mutableStateOf("User") }
     var weight by remember { mutableStateOf("70 kg") }
@@ -88,284 +92,299 @@ fun ProfileScreen() {
     ) { uri: Uri? ->
         selectedImageUri = uri
     }
-
+    var selectedItemIndex by rememberSaveable { mutableStateOf(2) }
     // Replace Column with LazyColumn for scrollability
-    LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
-    ) {
-        item {
-            // Profile Picture and Header
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(Gray)
-                        .clickable { launcher.launch("image/*") }
+    Scaffold (
+        bottomBar = {
+            BottomNavigationBar(
+                selectedItemIndex = selectedItemIndex,
+                onItemSelected = {
+                    selectedItemIndex = it
+                },
+                navController = navController
+            )
+        }
+    ){_ ->
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
+        ) {
+            item {
+                // Profile Picture and Header
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    if (selectedImageUri != null) {
-                        AsyncImage(
-                            model = selectedImageUri,
-                            contentDescription = "Profile Picture",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        FloatingActionButton(
-                            onClick = { launcher.launch("image/*") },
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .size(32.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Add Image"
+                    Box(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .background(Gray)
+                            .clickable { launcher.launch("image/*") }
+                    ) {
+                        if (selectedImageUri != null) {
+                            AsyncImage(
+                                model = selectedImageUri,
+                                contentDescription = "Profile Picture",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
                             )
+                        } else {
+                            FloatingActionButton(
+                                onClick = { launcher.launch("image/*") },
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .size(32.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Add Image"
+                                )
+                            }
                         }
                     }
-                }
 
-                Text(
-                    text = "Hello, $userName",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 20.sp),
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-
-                IconButton(onClick = { /* TODO: Settings Action */ }) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Settings"
+                    Text(
+                        text = "Hello, $userName",
+                        style = MaterialTheme.typography.bodyMedium.copy(fontSize = 20.sp),
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
-                }
-            }
-        }
 
-        // Editable Rows
-        item {
-            EditableRow(
-                label = "Username",
-                value = userName,
-                isEditing = isEditingName,
-                onValueChange = { userName = it },
-                onEditingChange = { isEditingName = it }
-            )
-        }
-
-        item {
-            EditableRowWithValidation(
-                label = "Weight",
-                value = weight,
-                isEditing = isEditingWeight,
-                onValueChange = { weight = it },
-                onEditingChange = { isEditingWeight = it },
-                error = weightError,
-                validate = { newValue ->
-                    val numericValue = newValue.toIntOrNull()
-                    numericValue != null && numericValue in 10..200
-                },
-                onValidationFail = { weightError = true },
-                onValidationSuccess = { weightError = false; weight = "$it kg" },
-                unit = "kg"
-            )
-        }
-
-        item {
-            EditableRowWithValidation(
-                label = "Goal Weight",
-                value = goalWeight,
-                isEditing = isEditingGoalWeight,
-                onValueChange = { goalWeight = it },
-                onEditingChange = { isEditingGoalWeight = it },
-                error = goalWeightError,
-                validate = { newValue ->
-                    val numericValue = newValue.toIntOrNull()
-                    numericValue != null && numericValue in 10..200
-                },
-                onValidationFail = { goalWeightError = true },
-                onValidationSuccess = { goalWeightError = false; goalWeight = "$it kg" },
-                unit = "kg"
-            )
-        }
-
-        item {
-            EditableRowWithValidation(
-                label = "Height",
-                value = height,
-                isEditing = isEditingHeight,
-                onValueChange = { height = it },
-                onEditingChange = { isEditingHeight = it },
-                error = heightError,
-                validate = { newValue ->
-                    val numericValue = newValue.toIntOrNull()
-                    numericValue != null && numericValue in 0..999
-                },
-                onValidationFail = { heightError = true },
-                onValidationSuccess = { heightError = false; height = "$it cm" },
-                unit = "cm"
-            )
-        }
-
-        item {
-            EditableRowWithValidation(
-                label = "Age",
-                value = age,
-                isEditing = isEditingAge,
-                onValueChange = { age = it },
-                onEditingChange = { isEditingAge = it },
-                error = ageError,
-                validate = { newValue ->
-                    val numericValue = newValue.toIntOrNull()
-                    numericValue != null && numericValue in 6..100
-                },
-                onValidationFail = { ageError = true },
-                onValidationSuccess = { ageError = false; age = it }
-            )
-        }
-
-        item {
-            EditablePasswordRow(
-                label = "Password",
-                value = password,
-                isEditing = isEditingPassword,
-                onValueChange = { password = it },
-                onEditingChange = { isEditingPassword = it }
-            )
-        }
-
-        // Statistics Section
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Box for Height
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(100.dp)
-                        .drawWithCache {
-                            val brush = Brush.linearGradient(
-                                listOf(
-                                    GradientStart, // Use the defined gradient start color
-                                    GradientEnd // Use the defined gradient end color
-                                )
-
-                            )
-                            onDrawBehind {
-                                drawRoundRect(
-                                    brush,
-                                    cornerRadius = CornerRadius(12.dp.toPx())
-                                )
-                            }
-                        }
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Height", color = White, fontWeight = FontWeight.Bold)
-                        Text(height, color = White)
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                // Box for Current Weight
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(100.dp)
-                        .drawWithCache {
-                            val brush = Brush.linearGradient(
-                                listOf(
-                                    GradientStart,
-                                    GradientEnd
-                                )
-                            )
-                            onDrawBehind {
-                                drawRoundRect(
-                                    brush,
-                                    cornerRadius = CornerRadius(12.dp.toPx())
-                                )
-                            }
-                        }
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Current Weight", color = White, fontWeight = FontWeight.Bold)
-                        Text(weight, color = White)
+                    IconButton(onClick = { /* TODO: Settings Action */ }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings"
+                        )
                     }
                 }
             }
-        }
 
-        item {
-            Spacer(modifier = Modifier.height(8.dp)) // Space between rows
+            // Editable Rows
+            item {
+                EditableRow(
+                    label = "Username",
+                    value = userName,
+                    isEditing = isEditingName,
+                    onValueChange = { userName = it },
+                    onEditingChange = { isEditingName = it }
+                )
+            }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Box for Goal Weight
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(100.dp)
-                        .drawWithCache {
-                            val brush = Brush.linearGradient(
-                                listOf(
-                                    GradientStart,
-                                    GradientEnd
-                                )
-                            )
-                            onDrawBehind {
-                                drawRoundRect(
-                                    brush,
-                                    cornerRadius = CornerRadius(12.dp.toPx())
-                                )
-                            }
-                        }
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
+            item {
+                EditableRowWithValidation(
+                    label = "Weight",
+                    value = weight,
+                    isEditing = isEditingWeight,
+                    onValueChange = { weight = it },
+                    onEditingChange = { isEditingWeight = it },
+                    error = weightError,
+                    validate = { newValue ->
+                        val numericValue = newValue.toIntOrNull()
+                        numericValue != null && numericValue in 10..200
+                    },
+                    onValidationFail = { weightError = true },
+                    onValidationSuccess = { weightError = false; weight = "$it kg" },
+                    unit = "kg"
+                )
+            }
+
+            item {
+                EditableRowWithValidation(
+                    label = "Goal Weight",
+                    value = goalWeight,
+                    isEditing = isEditingGoalWeight,
+                    onValueChange = { goalWeight = it },
+                    onEditingChange = { isEditingGoalWeight = it },
+                    error = goalWeightError,
+                    validate = { newValue ->
+                        val numericValue = newValue.toIntOrNull()
+                        numericValue != null && numericValue in 10..200
+                    },
+                    onValidationFail = { goalWeightError = true },
+                    onValidationSuccess = { goalWeightError = false; goalWeight = "$it kg" },
+                    unit = "kg"
+                )
+            }
+
+            item {
+                EditableRowWithValidation(
+                    label = "Height",
+                    value = height,
+                    isEditing = isEditingHeight,
+                    onValueChange = { height = it },
+                    onEditingChange = { isEditingHeight = it },
+                    error = heightError,
+                    validate = { newValue ->
+                        val numericValue = newValue.toIntOrNull()
+                        numericValue != null && numericValue in 0..999
+                    },
+                    onValidationFail = { heightError = true },
+                    onValidationSuccess = { heightError = false; height = "$it cm" },
+                    unit = "cm"
+                )
+            }
+
+            item {
+                EditableRowWithValidation(
+                    label = "Age",
+                    value = age,
+                    isEditing = isEditingAge,
+                    onValueChange = { age = it },
+                    onEditingChange = { isEditingAge = it },
+                    error = ageError,
+                    validate = { newValue ->
+                        val numericValue = newValue.toIntOrNull()
+                        numericValue != null && numericValue in 6..100
+                    },
+                    onValidationFail = { ageError = true },
+                    onValidationSuccess = { ageError = false; age = it }
+                )
+            }
+
+            item {
+                EditablePasswordRow(
+                    label = "Password",
+                    value = password,
+                    isEditing = isEditingPassword,
+                    onValueChange = { password = it },
+                    onEditingChange = { isEditingPassword = it }
+                )
+            }
+
+            // Statistics Section
+            item {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Goal Weight", color = White, fontWeight = FontWeight.Bold)
-                        Text(goalWeight, color = White)
+                    // Box for Height
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(100.dp)
+                            .drawWithCache {
+                                val brush = Brush.linearGradient(
+                                    listOf(
+                                        GradientStart, // Use the defined gradient start color
+                                        GradientEnd // Use the defined gradient end color
+                                    )
+
+                                )
+                                onDrawBehind {
+                                    drawRoundRect(
+                                        brush,
+                                        cornerRadius = CornerRadius(12.dp.toPx())
+                                    )
+                                }
+                            }
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Height", color = White, fontWeight = FontWeight.Bold)
+                            Text(height, color = White)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    // Box for Current Weight
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(100.dp)
+                            .drawWithCache {
+                                val brush = Brush.linearGradient(
+                                    listOf(
+                                        GradientStart,
+                                        GradientEnd
+                                    )
+                                )
+                                onDrawBehind {
+                                    drawRoundRect(
+                                        brush,
+                                        cornerRadius = CornerRadius(12.dp.toPx())
+                                    )
+                                }
+                            }
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Current Weight", color = White, fontWeight = FontWeight.Bold)
+                            Text(weight, color = White)
+                        }
                     }
                 }
+            }
 
-                Spacer(modifier = Modifier.width(8.dp))
+            item {
+                Spacer(modifier = Modifier.height(8.dp)) // Space between rows
 
-                // Box for Calories
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(100.dp)
-                        .drawWithCache {
-                            val brush = Brush.linearGradient(
-                                listOf(
-                                    GradientStart,
-                                    GradientEnd
-                                )
-                            )
-                            onDrawBehind {
-                                drawRoundRect(
-                                    brush,
-                                    cornerRadius = CornerRadius(12.dp.toPx())
-                                )
-                            }
-                        }
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Calories Burned", color = White, fontWeight = FontWeight.Bold)
-                        Text("500 cal", color = White) // You can update this value based on your logic
+                    // Box for Goal Weight
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(100.dp)
+                            .drawWithCache {
+                                val brush = Brush.linearGradient(
+                                    listOf(
+                                        GradientStart,
+                                        GradientEnd
+                                    )
+                                )
+                                onDrawBehind {
+                                    drawRoundRect(
+                                        brush,
+                                        cornerRadius = CornerRadius(12.dp.toPx())
+                                    )
+                                }
+                            }
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Goal Weight", color = White, fontWeight = FontWeight.Bold)
+                            Text(goalWeight, color = White)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    // Box for Calories
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(100.dp)
+                            .drawWithCache {
+                                val brush = Brush.linearGradient(
+                                    listOf(
+                                        GradientStart,
+                                        GradientEnd
+                                    )
+                                )
+                                onDrawBehind {
+                                    drawRoundRect(
+                                        brush,
+                                        cornerRadius = CornerRadius(12.dp.toPx())
+                                    )
+                                }
+                            }
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Calories Burned", color = White, fontWeight = FontWeight.Bold)
+                            Text(
+                                "500 cal",
+                                color = White
+                            ) // You can update this value based on your logic
+                        }
                     }
                 }
             }
