@@ -38,12 +38,12 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = Routes.HOME_SCREEN) {
+    NavHost(navController = navController, startDestination = Routes.LOGIN) {
         composable(Routes.LOGIN) {
-            LoginScreen()
+            LoginScreen(navController)
         }
         composable(Routes.SIGNUP) {
-            SignUpScreen()
+            SignUpScreen(navController)
         }
         composable(Routes.HOME_SCREEN){
             HomeScreen(navController)

@@ -1,5 +1,6 @@
 package com.example.fitnessproject.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 //import androidx.compose.material.CircularProgressIndicator
@@ -7,25 +8,45 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.fitnessproject.data.login.LoginViewModel
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.*
 import com.example.fitnessproject.data.login.LoginUIEvent
 import com.example.fitnessproject.navigation.PostOfficeAppRouter
+import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.navigation.Screen
 import com.example.fitnessproject.navigation.SystemBackButtonHandler
 
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
+fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = viewModel()) {
 
+    val context = LocalContext.current
+    LaunchedEffect(loginViewModel.loginInProgress.value){
+        if (!loginViewModel.loginInProgress.value) {
+            if (loginViewModel.isLoginSuccessful.value) {
+                navController.popBackStack()
+                navController.navigate(Routes.HOME_SCREEN)
+            } else if (loginViewModel.loginError.value.isNotEmpty()) {
+                Toast.makeText(
+                    context,
+                    loginViewModel.loginError.value,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -73,6 +94,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
                     value = stringResource(id = R.string.login),
                     onButtonClicked = {
                         loginViewModel.onEvent(LoginUIEvent.LoginButtonClicked)
+
                     },
                     isEnabled = loginViewModel.allValidationsPassed.value
                 )
@@ -82,7 +104,8 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
                 DividerTextComponent()
 
                 ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
-                    PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
+//                    PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
+                    navController.navigate(Routes.SIGNUP)
                 })
             }
         }
@@ -93,13 +116,13 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
     }
 
 
-    SystemBackButtonHandler {
-        PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
-    }
+//    SystemBackButtonHandler {
+//        PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
+//    }
 }
 
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+//    LoginScreen()
 }

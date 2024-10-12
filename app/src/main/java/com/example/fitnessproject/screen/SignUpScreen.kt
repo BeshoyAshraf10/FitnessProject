@@ -1,5 +1,6 @@
 package com.example.fitnessproject.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 //import androidx.compose.material.CircularProgressIndicator
@@ -7,26 +8,51 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.data.signup.SignupViewModel
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.*
 import com.example.fitnessproject.data.signup.SignupUIEvent
 import com.example.fitnessproject.navigation.PostOfficeAppRouter
+import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.navigation.Screen
 import com.example.fitnessproject.navigation.SystemBackButtonHandler
 
 
 @Composable
-fun SignUpScreen(signupViewModel: SignupViewModel = viewModel()) {
+fun SignUpScreen(navController: NavController,signupViewModel: SignupViewModel = viewModel()) {
+    val context = LocalContext.current
 
+    LaunchedEffect (signupViewModel.signUpInProgress.value){
+        if (!signupViewModel.signUpInProgress.value ){
+            if (signupViewModel.isSignUpSuccessful.value) {
+                Toast.makeText(
+                    context,
+                    "Sign up successful",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            else if (signupViewModel.signUpError.value.isNotEmpty()) {
+                Toast.makeText(
+                    context,
+                    signupViewModel.signUpError.value,
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
+        }
+    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -95,16 +121,21 @@ fun SignUpScreen(signupViewModel: SignupViewModel = viewModel()) {
                     value = stringResource(id = R.string.register),
                     onButtonClicked = {
                         signupViewModel.onEvent(SignupUIEvent.RegisterButtonClicked)
+
                     },
                     isEnabled = signupViewModel.allValidationsPassed.value
+
                 )
+
 
                 Spacer(modifier = Modifier.height(20.dp))
 
                 DividerTextComponent()
 
                 ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
-                    PostOfficeAppRouter.navigateTo(Screen.LoginScreen)
+//                    PostOfficeAppRouter.navigateTo(Screen.LoginScreen)
+                    navController.popBackStack()
+                    navController.navigate(Routes.LOGIN)
                 })
             }
 
@@ -121,5 +152,5 @@ fun SignUpScreen(signupViewModel: SignupViewModel = viewModel()) {
 @Preview
 @Composable
 fun DefaultPreviewOfSignUpScreen() {
-    SignUpScreen()
+    SignUpScreen(rememberNavController())
 }

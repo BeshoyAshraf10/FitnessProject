@@ -63,13 +63,22 @@ fun HomeScreen(navController: NavController) {
                 .padding(horizontal = 16.dp, vertical = 20.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            CardItem(title = "Steps", imageRes = R.drawable.steps, screenWidth)
+            CardItem(title = "Steps", imageRes = R.drawable.steps, screenWidth){
+
+            }
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Activities", imageRes = R.drawable.activities, screenWidth)
+            CardItem(title = "Activities", imageRes = R.drawable.activities, screenWidth){
+
+            }
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Calories & Nutrition", imageRes = R.drawable.nutritionjpg, screenWidth)
+            CardItem(title = "Calories & Nutrition", imageRes = R.drawable.nutritionjpg, screenWidth){
+
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Update Weight", imageRes = R.drawable.weight, screenWidth)
+            CardItem(title = "Update Weight", imageRes = R.drawable.weight, screenWidth){
+
+            }
         }
     }
 }
@@ -127,19 +136,18 @@ fun BottomNavigationBar(
 
 // CardItem remains the same
 @Composable
-fun CardItem(title: String, imageRes: Int, screenWidth: Dp) {
+fun CardItem(title: String, imageRes: Int, screenWidth: Dp,onNavigate: () -> Unit) {
     val cardHeight = screenWidth * 0.4f
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(cardHeight)
             .padding(horizontal = 8.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
+        onClick = onNavigate
     ) {
         Box {
-            // Your image and title layout
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = title,

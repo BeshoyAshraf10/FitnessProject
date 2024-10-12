@@ -1,23 +1,32 @@
 package com.example.fitnessproject.data.signup
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.fitnessproject.data.RegistrationUIState
 import com.example.fitnessproject.data.rules.Validator
+import com.example.fitnessproject.model.User
 import com.example.fitnessproject.navigation.PostOfficeAppRouter
 import com.example.fitnessproject.navigation.Screen
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class SignupViewModel : ViewModel() {
     private val TAG = SignupViewModel::class.simpleName
 
+    var signUpError = mutableStateOf("")
 
     var registrationUIState = mutableStateOf(RegistrationUIState())
 
     var allValidationsPassed = mutableStateOf(false)
 
     var signUpInProgress = mutableStateOf(false)
+
+    var isSignUpSuccessful = mutableStateOf(false)
+
+    val db = Firebase.firestore
 
     fun onEvent(event: SignupUIEvent) {
         when (event) {
@@ -136,16 +145,34 @@ class SignupViewModel : ViewModel() {
             .addOnCompleteListener {
                 Log.d(TAG, "Inside_OnCompleteListener")
                 Log.d(TAG, " isSuccessful = ${it.isSuccessful}")
-
-                signUpInProgress.value = false
+                isSignUpSuccessful.value = it.isSuccessful
                 if (it.isSuccessful) {
-                    PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+//                    PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid
+                    if (userId != null) {
+                        saveUser(userId,email,registrationUIState.value.firstName)
+                    }
                 }
+                signUpInProgress.value = false
             }
             .addOnFailureListener {
                 Log.d(TAG, "Inside_OnFailureListener")
                 Log.d(TAG, "Exception= ${it.message}")
                 Log.d(TAG, "Exception= ${it.localizedMessage}")
+                signUpError.value = it.message.toString()
             }
+    }
+
+    private fun saveUser(uid: String, email: String, name: String) {
+        val user = User(email, name)
+        db.collection("users")
+            .document(uid)
+            .set(user)
+            .addOnFailureListener { e ->
+                Log.d(TAG, "Inside_saveUser")
+                Log.d(TAG, "Exception= ${e.message}")
+                signUpError.value = e.message.toString()
+            }
+
     }
 }
