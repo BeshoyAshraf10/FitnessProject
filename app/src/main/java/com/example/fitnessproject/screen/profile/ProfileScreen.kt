@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -47,6 +48,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,12 +56,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.fitnessproject.R
 import com.example.fitnessproject.components.BottomNavigationBar
+import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.ui.theme.GradientEnd
 import com.example.fitnessproject.ui.theme.GradientStart
 import com.example.fitnessproject.ui.theme.Gray
 import com.example.fitnessproject.ui.theme.Red
 import com.example.fitnessproject.ui.theme.White
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 @Composable
@@ -104,9 +110,10 @@ fun ProfileScreen(navController: NavController) {
                 navController = navController
             )
         }
-    ){_ ->
+    ){innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(innerPadding)
+                .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp) // Add spacing between items
         ) {
             item {
@@ -151,10 +158,15 @@ fun ProfileScreen(navController: NavController) {
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
 
-                    IconButton(onClick = { /* TODO: Settings Action */ }) {
+                    IconButton(onClick = {
+                        val auth = Firebase.auth
+                        auth.signOut()
+                        navController.popBackStack()
+                        navController.navigate(Routes.LOGIN)
+                    }) {
                         Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings"
+                            painter = painterResource(R.drawable.ic_logout),
+                            contentDescription = "Log out"
                         )
                     }
                 }
@@ -628,8 +640,8 @@ fun validatePassword(password: String): ValidationResult {
 }
 
 
-@Preview(showBackground = true)
+@Preview(showBackground = false, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-
+    ProfileScreen(navController = NavController(ComponentActivity()))
 }
