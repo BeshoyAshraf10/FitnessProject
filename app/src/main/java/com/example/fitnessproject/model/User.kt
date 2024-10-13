@@ -11,6 +11,7 @@ data class User (
     val bmi: Double = 0.0,
     val bmr: Double = 0.0,
     val activityLevel: String = "",
-    val calories: Int = 0
+    val calories: Int = 0,
+    val goalWeight: Int = 0
 
 )

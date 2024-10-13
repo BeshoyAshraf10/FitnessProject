@@ -31,11 +31,15 @@ import com.example.fitnessproject.navigation.SystemBackButtonHandler
 
 
 @Composable
-fun SignUpScreen(navController: NavController,signupViewModel: SignupViewModel = viewModel()) {
+fun SignUpScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    signupViewModel: SignupViewModel = viewModel()
+) {
     val context = LocalContext.current
 
-    LaunchedEffect (signupViewModel.signUpInProgress.value){
-        if (!signupViewModel.signUpInProgress.value ){
+    LaunchedEffect(signupViewModel.signUpInProgress.value) {
+        if (!signupViewModel.signUpInProgress.value) {
             if (signupViewModel.isSignUpSuccessful.value) {
                 Toast.makeText(
                     context,
@@ -44,8 +48,7 @@ fun SignUpScreen(navController: NavController,signupViewModel: SignupViewModel =
                 ).show()
                 navController.popBackStack()
                 navController.navigate(Routes.FIRST_SCREEN)
-            }
-            else if (signupViewModel.signUpError.value.isNotEmpty()) {
+            } else if (signupViewModel.signUpError.value.isNotEmpty()) {
                 Toast.makeText(
                     context,
                     signupViewModel.signUpError.value,
@@ -56,17 +59,17 @@ fun SignUpScreen(navController: NavController,signupViewModel: SignupViewModel =
         }
     }
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
 
         Surface(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(28.dp)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = modifier.fillMaxSize()) {
 
                 NormalTextComponent(value = stringResource(id = R.string.hello))
                 HeadingTextComponent(value = stringResource(id = R.string.create_account))
@@ -143,7 +146,7 @@ fun SignUpScreen(navController: NavController,signupViewModel: SignupViewModel =
 
         }
 
-        if(signupViewModel.signUpInProgress.value) {
+        if (signupViewModel.signUpInProgress.value) {
             CircularProgressIndicator()
         }
     }

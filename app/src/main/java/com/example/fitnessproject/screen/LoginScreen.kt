@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.data.login.LoginViewModel
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.*
@@ -33,10 +34,14 @@ import com.example.fitnessproject.navigation.SystemBackButtonHandler
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = viewModel()) {
+fun LoginScreen(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    loginViewModel: LoginViewModel = viewModel(),
+) {
 
     val context = LocalContext.current
-    LaunchedEffect(loginViewModel.loginInProgress.value){
+    LaunchedEffect(loginViewModel.loginInProgress.value) {
         if (!loginViewModel.loginInProgress.value) {
             if (loginViewModel.isLoginSuccessful.value) {
                 navController.popBackStack()
@@ -51,7 +56,7 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
         }
 
     }
-    LaunchedEffect (loginViewModel.isForgetPassEmailSent.value){
+    LaunchedEffect(loginViewModel.isForgetPassEmailSent.value) {
         if (loginViewModel.isForgetPassEmailSent.value) {
             Toast.makeText(
                 context,
@@ -62,19 +67,19 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
     }
 
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
 
         Surface(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .background(Color.White)
                 .padding(28.dp)
         ) {
 
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxSize()
             ) {
 
@@ -82,7 +87,8 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
                 HeadingTextComponent(value = stringResource(id = R.string.welcome))
                 Spacer(modifier = Modifier.height(20.dp))
 
-                MyTextFieldComponent(labelValue = stringResource(id = R.string.email),
+                MyTextFieldComponent(
+                    labelValue = stringResource(id = R.string.email),
                     painterResource(id = R.drawable.message),
                     onTextChanged = {
                         loginViewModel.onEvent(LoginUIEvent.EmailChanged(it))
@@ -100,7 +106,7 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
-                UnderLinedTextComponent(value = stringResource(id = R.string.forgot_password)){
+                UnderLinedTextComponent(value = stringResource(id = R.string.forgot_password)) {
                     loginViewModel.onEvent(LoginUIEvent.ForgotPasswordClicked)
                 }
 
@@ -126,7 +132,7 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
             }
         }
 
-        if(loginViewModel.loginInProgress.value) {
+        if (loginViewModel.loginInProgress.value) {
             CircularProgressIndicator()
         }
     }
@@ -140,7 +146,7 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
 @Preview
 @Composable
 fun LoginScreenPreview() {
-//    LoginScreen()
+    LoginScreen(rememberNavController())
 }
 
 @Composable

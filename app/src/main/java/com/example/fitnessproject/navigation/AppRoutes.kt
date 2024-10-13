@@ -48,10 +48,10 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
             LoadingScreen(navController = navController)
         }
         composable(Routes.LOGIN) {
-            LoginScreen(navController)
+            LoginScreen(navController, modifier = modifier)
         }
         composable(Routes.SIGNUP) {
-            SignUpScreen(navController)
+            SignUpScreen(navController, modifier = modifier)
         }
         composable(Routes.HOME_SCREEN) {
             HomeScreen(navController)
