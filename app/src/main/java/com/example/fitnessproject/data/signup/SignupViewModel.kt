@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.fitnessproject.data.RegistrationUIState
 import com.example.fitnessproject.data.rules.Validator
+import com.example.fitnessproject.database.firebase.UserData
 import com.example.fitnessproject.model.User
 import com.example.fitnessproject.navigation.PostOfficeAppRouter
 import com.example.fitnessproject.navigation.Screen
@@ -26,7 +27,6 @@ class SignupViewModel : ViewModel() {
 
     var isSignUpSuccessful = mutableStateOf(false)
 
-    val db = Firebase.firestore
 
     fun onEvent(event: SignupUIEvent) {
         when (event) {
@@ -150,7 +150,7 @@ class SignupViewModel : ViewModel() {
 //                    PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
                     val userId = FirebaseAuth.getInstance().currentUser?.uid
                     if (userId != null) {
-                        saveUser(userId,email,registrationUIState.value.firstName)
+                        UserData().writeNewUser(userId,registrationUIState.value.firstName,registrationUIState.value.lastName,email)
                     }
                 }
                 signUpInProgress.value = false
@@ -163,15 +163,5 @@ class SignupViewModel : ViewModel() {
             }
     }
 
-    private fun saveUser(uid: String, email: String, name: String) {
-        val user = User(email, name)
-        db.collection("users")
-            .document(uid)
-            .set(user)
-            .addOnFailureListener { e ->
-                Log.d(TAG, "Inside_saveUser")
-                Log.d(TAG, "Exception= ${e.message}")
-                signUpError.value = e.message.toString()
-            }
-    }
+
 }

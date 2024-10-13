@@ -1,6 +1,9 @@
 package com.example.fitnessproject.screen
 
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
+import android.window.SplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 //import androidx.compose.material.CircularProgressIndicator
@@ -27,6 +30,7 @@ import com.example.fitnessproject.navigation.PostOfficeAppRouter
 import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.navigation.Screen
 import com.example.fitnessproject.navigation.SystemBackButtonHandler
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = viewModel()) {
@@ -56,6 +60,7 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
             ).show()
         }
     }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -136,4 +141,34 @@ fun LoginScreen(navController: NavController,loginViewModel: LoginViewModel = vi
 @Composable
 fun LoginScreenPreview() {
 //    LoginScreen()
+}
+
+@Composable
+fun LoadingScreen(navController: NavController) {
+    val auth = FirebaseAuth.getInstance()
+    val context = LocalContext.current
+
+    // LaunchEffect to check the authentication state once when this screen is launched
+    LaunchedEffect(Unit) {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            // User is logged in, navigate to home screen
+            navController.navigate(Routes.HOME_SCREEN) {
+                popUpTo(Routes.LOADING_SCREEN) { inclusive = true }
+            }
+        } else {
+            // User is not logged in, navigate to login screen
+            navController.navigate(Routes.LOGIN) {
+                popUpTo(Routes.LOADING_SCREEN) { inclusive = true }
+            }
+        }
+    }
+
+    // Simple UI with a progress indicator while checking login state
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
 }

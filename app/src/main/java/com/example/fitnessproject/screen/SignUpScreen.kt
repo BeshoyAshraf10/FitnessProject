@@ -42,6 +42,8 @@ fun SignUpScreen(navController: NavController,signupViewModel: SignupViewModel =
                     "Sign up successful",
                     Toast.LENGTH_SHORT
                 ).show()
+                navController.popBackStack()
+                navController.navigate(Routes.FIRST_SCREEN)
             }
             else if (signupViewModel.signUpError.value.isNotEmpty()) {
                 Toast.makeText(

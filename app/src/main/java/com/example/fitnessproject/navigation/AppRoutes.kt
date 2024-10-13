@@ -15,6 +15,7 @@ import com.example.fitnessproject.screen.calorieCalculator.CalorieCalculatorScre
 import com.example.fitnessproject.screen.Activities.FinishActivityScreen
 import com.example.fitnessproject.screen.calorieCalculator.InformationScreen
 import com.example.fitnessproject.screen.Activities.StartActivityScreen
+import com.example.fitnessproject.screen.LoadingScreen
 import com.example.fitnessproject.screen.LoginScreen
 import com.example.fitnessproject.screen.SignUpScreen
 import com.example.fitnessproject.screen.home.HomeScreen
@@ -23,6 +24,7 @@ import com.example.fitnessproject.viewModel.ActivityViewModel
 import com.example.fitnessproject.viewModel.TimerViewModel
 
 object Routes {
+    const val LOADING_SCREEN = "loading_screen"
     const val ACT_SESSIONS = "ActivitySessions"
     const val HOME_SCREEN = "home"
     const val PROFILE_SCREEN = "profile"
@@ -41,7 +43,10 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = Routes.HOME_SCREEN) {
+    NavHost(navController = navController, startDestination = Routes.LOADING_SCREEN) {
+        composable(Routes.LOADING_SCREEN) {
+            LoadingScreen(navController = navController)
+        }
         composable(Routes.LOGIN) {
             LoginScreen(navController)
         }
