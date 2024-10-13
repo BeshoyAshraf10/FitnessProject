@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.fitnessproject.localDB.DateConverter
+import com.example.fitnessproject.database.localDB.DateConverter
 import com.example.fitnessproject.viewModel.ActivityViewModel
 
 @Composable
