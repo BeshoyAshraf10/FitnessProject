@@ -31,6 +31,7 @@
             android:name=".StepsActivity"
             android:exported="true"
             />
+        <receiver android:name=".notification.AlarmReceiver"/>
     </application>
 
 </manifest>

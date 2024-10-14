@@ -18,8 +18,6 @@ class AlarmReceiver: BroadcastReceiver() {
             showNotification(context,"Fitness Project", "You are finished your workout")
         }catch (ex : Exception){}
     }
-
-
 }
 
 private fun showNotification(context: Context, title: String,desc : String) {
@@ -39,8 +37,11 @@ val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as Notifica
 
 }
 
+
+
 // move it
-private fun setAlarm(context: Context) {
+
+fun setAlarm(context: Context) {
     val timeSec=System.currentTimeMillis()
     val alarmManager=context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
