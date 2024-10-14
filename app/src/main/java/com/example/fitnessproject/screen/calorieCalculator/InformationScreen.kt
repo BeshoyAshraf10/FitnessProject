@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
-import com.example.fitnessproject.database.firebase.UserData
+import com.example.fitnessproject.database.firebase.UserFirebase
 import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.ui.theme.TDEEBabyBlue
 import com.example.fitnessproject.ui.theme.TDEEBlue
@@ -291,7 +291,7 @@ fun InformationScreen(navController: NavController) {
                                     calculateBMRForWomen(weight, height, age)
                                 }
                                 val bmi = calculateBMI(weight, height)
-                                UserData().addUserData(
+                                UserFirebase().addUserData(
                                     Firebase.auth.currentUser!!.uid,
                                     age.toInt(),
                                     height.toInt(),

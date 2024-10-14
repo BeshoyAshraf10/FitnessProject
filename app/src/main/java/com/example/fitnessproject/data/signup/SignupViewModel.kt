@@ -1,18 +1,12 @@
 package com.example.fitnessproject.data.signup
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.fitnessproject.data.RegistrationUIState
 import com.example.fitnessproject.data.rules.Validator
-import com.example.fitnessproject.database.firebase.UserData
-import com.example.fitnessproject.model.User
-import com.example.fitnessproject.navigation.PostOfficeAppRouter
-import com.example.fitnessproject.navigation.Screen
+import com.example.fitnessproject.database.firebase.UserFirebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 class SignupViewModel : ViewModel() {
     private val TAG = SignupViewModel::class.simpleName
@@ -150,7 +144,7 @@ class SignupViewModel : ViewModel() {
 //                    PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
                     val userId = FirebaseAuth.getInstance().currentUser?.uid
                     if (userId != null) {
-                        UserData().writeNewUser(userId,registrationUIState.value.firstName,registrationUIState.value.lastName,email)
+                        UserFirebase().writeNewUser(userId,registrationUIState.value.firstName,registrationUIState.value.lastName,email)
                     }
                 }
                 signUpInProgress.value = false

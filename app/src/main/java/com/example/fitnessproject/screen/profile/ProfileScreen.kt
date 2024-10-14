@@ -2,12 +2,9 @@ package com.example.fitnessproject.screen.profile
 
 import android.content.Context
 import android.net.Uri
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,8 +25,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
@@ -62,15 +57,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.util.query
 import coil.compose.AsyncImage
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.BottomNavigationBar
-import com.example.fitnessproject.database.firebase.UserData
+import com.example.fitnessproject.database.firebase.UserFirebase
 import com.example.fitnessproject.model.User
 import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.ui.theme.GradientEnd
@@ -93,7 +85,7 @@ fun ProfileScreen(navController: NavController) {
 
     LaunchedEffect(userId) {
         val fetchedUser = withContext(Dispatchers.IO) {
-            UserData().getUserData(userId)
+            UserFirebase().getUserData(userId)
         }
         user.value = fetchedUser
     }
@@ -734,7 +726,7 @@ suspend fun updateData(
     goalWeight: String
 ) {
     val success = try {
-        UserData().updateUserData(
+        UserFirebase().updateUserData(
             userId = Firebase.auth.currentUser!!.uid,
             firstName = firstName,
             lastName = lastName,

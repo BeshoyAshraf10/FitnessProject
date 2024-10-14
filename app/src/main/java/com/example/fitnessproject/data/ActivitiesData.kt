@@ -35,4 +35,5 @@ class ActivitiesData {
             null
         }
     }
+
 }
