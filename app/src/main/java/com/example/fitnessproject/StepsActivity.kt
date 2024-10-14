@@ -172,7 +172,7 @@ class StepsActivity : ComponentActivity(), SensorEventListener {
                                     "Time"
                                 )
                                 Stepsinfo(
-                                    R.drawable.calories,
+                                    R.drawable.calories_icon,
                                     calculateCalories(currentStepCount).toString(),
                                     "KCal",
                                     "calories"
