@@ -35,7 +35,7 @@ import com.example.fitnessproject.StepsActivity
 import com.example.fitnessproject.components.BottomNavigationBar
 import com.example.fitnessproject.navigation.Routes
 
-val selectedColor: Color = Color.White
+
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -80,7 +80,7 @@ fun HomeScreen(navController: NavController) {
 //            }
 
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Update Weight", imageRes = R.drawable.weight, screenWidth) {
+            CardItem(title = "Update Data", imageRes = R.drawable.weight, screenWidth) {
                 navController.navigate(Routes.FIRST_SCREEN)
             }
         }

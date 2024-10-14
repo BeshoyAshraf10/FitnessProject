@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.fitnessproject.components.ButtonComponent
 import com.example.fitnessproject.database.localDB.DateConverter
 import com.example.fitnessproject.viewModel.ActivityViewModel
 
@@ -88,27 +89,21 @@ fun FinishActivityScreen(
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-
-                Button(
-                    modifier = modifier
+                ButtonComponent(
+                    value = "Save",
+                    isEnabled = true,
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 80.dp),
-                    onClick = {
-                        saveActivitySession(
-                            activityViewModel,
-                            timeStarted,
-                            timeEnded,
-                            timerValue,
-                            caloriesBurned
-                        )
-                        navController.popBackStack()
-                    }
-                ) {
-                    Text(
-                        text = "Save",
-                        fontSize = 20.sp,
-                        textAlign = TextAlign.Center
+                ){
+                    saveActivitySession(
+                        activityViewModel,
+                        timeStarted,
+                        timeEnded,
+                        timerValue,
+                        caloriesBurned
                     )
+                    navController.popBackStack()
                 }
             }
 

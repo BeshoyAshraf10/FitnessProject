@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +40,7 @@ fun CalorieCalculatorScreen2(calories: Int, bmr: Int, bmi: Float) {
     ) {
         Card(
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = TDEEBlue),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
             elevation = CardDefaults.cardElevation(4.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -72,7 +73,7 @@ fun CalorieCalculatorScreen2(calories: Int, bmr: Int, bmi: Float) {
             }
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 360.dp, max = 460.dp)
@@ -116,7 +117,7 @@ fun SmallCard(title: String, value: String, unit: String) {
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         modifier = Modifier.size(width = 140.dp, height = 110.dp)
     ) {
         Column(
@@ -127,7 +128,7 @@ fun SmallCard(title: String, value: String, unit: String) {
             Text(
                 text = title,
                 fontSize = 16.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontFamily = FontFamily(Font(R.font.roboto_regular)),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
@@ -135,7 +136,7 @@ fun SmallCard(title: String, value: String, unit: String) {
                 text = value,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontFamily = FontFamily(Font(R.font.roboto_bold)),
                 // maxLines = 1,
                 softWrap = true,

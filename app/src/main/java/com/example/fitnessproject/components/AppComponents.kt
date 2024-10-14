@@ -1,6 +1,8 @@
 package com.example.fitnessproject.components
 
+import android.graphics.Paint.Style
 import android.util.Log
+import android.webkit.WebSettings.TextSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,6 +28,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 //import androidx.compose.material.icons.filled.Visibility
 //import androidx.compose.material.icons.filled.VisibilityOff
@@ -41,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -64,39 +68,38 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.Visibility
+import androidx.core.graphics.toColorInt
 
 import com.example.fitnessproject.R
 import com.example.fitnessproject.data.NavigationItem
 import com.example.fitnessproject.ui.theme.*
 
 @Composable
-fun NormalTextComponent(value: String) {
+fun NormalTextComponent(value: String,align: TextAlign = TextAlign.Center,size: Int = 24,modifier: Modifier = Modifier) {
     Text(
         text = value,
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = 40.dp),
+        modifier = modifier,
         style = TextStyle(
-            fontSize = 24.sp,
+            fontSize = size.sp,
             fontWeight = FontWeight.Normal,
             fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.colorText),
-        textAlign = TextAlign.Center
+        ), color = MaterialTheme.colorScheme.onSurface,
+        textAlign = align
     )
 }
 
 @Composable
-fun HeadingTextComponent(value: String) {
+fun HeadingTextComponent(value: String, modifier: Modifier = Modifier) {
     Text(
         text = value,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(),
         style = TextStyle(
             fontSize = 30.sp,
             fontWeight = FontWeight.Bold,
             fontStyle = FontStyle.Normal
-        ), color = colorResource(id = R.color.colorText),
+        ), color =MaterialTheme.colorScheme.onSurface,
         textAlign = TextAlign.Center
     )
 }
@@ -120,9 +123,9 @@ fun MyTextFieldComponent(
             .clip(componentShapes.small),
         label = { Text(text = labelValue) },
         colors = outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
+            focusedBorderColor = MaterialTheme.colorScheme.secondary,
+            focusedLabelColor = MaterialTheme.colorScheme.secondary,
+            cursorColor = MaterialTheme.colorScheme.secondary,
             //backgroundColor = BgColor
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -164,9 +167,9 @@ fun PasswordTextFieldComponent(
             .clip(componentShapes.small),
         label = { Text(text = labelValue) },
         colors = outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
+            focusedBorderColor = MaterialTheme.colorScheme.secondary,
+            focusedLabelColor = MaterialTheme.colorScheme.secondary,
+            cursorColor = MaterialTheme.colorScheme.secondary,
             //backgroundColor = BgColor
         ),
         keyboardOptions = KeyboardOptions(
@@ -246,12 +249,12 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
 
     val annotatedString = buildAnnotatedString {
         append(initialText)
-        withStyle(style = SpanStyle(color = Primary)) {
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
             pushStringAnnotation(tag = privacyPolicyText, annotation = privacyPolicyText)
             append(privacyPolicyText)
         }
         append(andText)
-        withStyle(style = SpanStyle(color = Primary)) {
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.secondary)) {
             pushStringAnnotation(tag = termsAndConditionsText, annotation = termsAndConditionsText)
             append(termsAndConditionsText)
         }
@@ -272,9 +275,9 @@ fun ClickableTextComponent(value: String, onTextSelected: (String) -> Unit) {
 }
 
 @Composable
-fun ButtonComponent(value: String, onButtonClicked: () -> Unit, isEnabled: Boolean = false) {
+fun ButtonComponent(value: String,  isEnabled: Boolean = false,modifier: Modifier = Modifier,onButtonClicked: () -> Unit) {
     Button(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .heightIn(48.dp),
         onClick = {
@@ -290,7 +293,13 @@ fun ButtonComponent(value: String, onButtonClicked: () -> Unit, isEnabled: Boole
                 .fillMaxWidth()
                 .heightIn(48.dp)
                 .background(
-                    brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
+                    brush = Brush.horizontalGradient(
+                        listOf(
+                            Primary,
+                            Secondary// Use the defined gradient end color
+                        )
+
+                    ),
                     shape = RoundedCornerShape(50.dp)
                 ),
             contentAlignment = Alignment.Center
@@ -319,21 +328,21 @@ fun DividerTextComponent() {
                 .fillMaxWidth()
                 .weight(1f),
             thickness = 1.dp,
-            color = GrayColor
+            color = MaterialTheme.colorScheme.background
         )
 
         Text(
             modifier = Modifier.padding(8.dp),
             text = stringResource(R.string.or),
             fontSize = 18.sp,
-            color = TextColor
+            color = MaterialTheme.colorScheme.onBackground
         )
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
             thickness = 1.dp,
-            color = GrayColor
+            color = MaterialTheme.colorScheme.background
         )
     }
 }
@@ -346,7 +355,8 @@ fun ClickableLoginTextComponent(tryingToLogin: Boolean = true, onTextSelected: (
     val loginText = if (tryingToLogin) "Login" else "Register"
 
     val annotatedString = buildAnnotatedString {
-        append(initialText)
+
+        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)){ append(initialText) }
         withStyle(style = SpanStyle(color = Primary)) {
             pushStringAnnotation(tag = loginText, annotation = loginText)
             append(loginText)
@@ -393,7 +403,7 @@ fun UnderLinedTextComponent(value: String, onTextSelected: () -> Unit) {
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
                 fontStyle = FontStyle.Normal
-            ), color = colorResource(id = R.color.colorGray),
+            ), color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
             textDecoration = TextDecoration.Underline
         )
@@ -401,106 +411,7 @@ fun UnderLinedTextComponent(value: String, onTextSelected: () -> Unit) {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppToolbar(
-    toolbarTitle: String, logoutButtonClicked: () -> Unit,
-    navigationIconClicked: () -> Unit
-) {
 
-    TopAppBar(
-        //backgroundColor = Primary,
-        title = {
-            Text(
-                text = toolbarTitle, color = WhiteColor
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = {
-                navigationIconClicked.invoke()
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = stringResource(R.string.menu),
-                    tint = WhiteColor
-                )
-            }
-
-        },
-        actions = {
-            IconButton(onClick = {
-                logoutButtonClicked.invoke()
-            }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ExitToApp,
-                    contentDescription = stringResource(id = R.string.logout),
-                )
-            }
-        }
-    )
-}
-
-
-
-@Composable
-fun NavigationDrawerHeader(value: String?) {
-    Box(
-        modifier = Modifier
-            .background(
-                Brush.horizontalGradient(
-                    listOf(Primary, Secondary)
-                )
-            )
-            .fillMaxWidth()
-            .height(180.dp)
-            .padding(32.dp)
-    ) {
-
-        NavigationDrawerText(
-            title = value?:stringResource(R.string.navigation_header), 28.sp , AccentColor
-        )
-
-    }
-}
-
-@Composable
-fun NavigationDrawerBody(navigationDrawerItems: List<NavigationItem>,
-                         onNavigationItemClicked:(NavigationItem) -> Unit) {
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-
-        items(navigationDrawerItems) {
-            NavigationItemRow(item = it,onNavigationItemClicked)
-        }
-
-    }
-}
-
-@Composable
-fun NavigationItemRow(item: NavigationItem,
-                      onNavigationItemClicked:(NavigationItem) -> Unit) {
-
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onNavigationItemClicked.invoke(item)
-            }
-            .padding(all = 16.dp)
-    ) {
-
-        Icon(
-            imageVector = item.icon,
-            contentDescription = item.description,
-        )
-
-        Spacer(modifier = Modifier.width(18.dp))
-
-        NavigationDrawerText(title = item.title, 18.sp, Primary)
-
-
-    }
-}
 
 @Composable
 fun NavigationDrawerText(title: String, textUnit: TextUnit,color: Color) {
@@ -509,11 +420,11 @@ fun NavigationDrawerText(title: String, textUnit: TextUnit,color: Color) {
 
     Text(
         text = title, style = TextStyle(
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = textUnit,
             fontStyle = FontStyle.Normal,
             shadow = Shadow(
-                color = Primary,
+                color = MaterialTheme.colorScheme.primary,
                 offset = shadowOffset, 2f
             )
         )

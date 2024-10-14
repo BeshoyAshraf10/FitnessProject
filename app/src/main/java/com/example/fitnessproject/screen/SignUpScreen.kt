@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 //import androidx.compose.material.CircularProgressIndicator
 //import androidx.compose.material.Surface
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,19 +60,23 @@ fun SignUpScreen(
         }
     }
     Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxSize()
     ) {
 
         Surface(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(28.dp)
         ) {
-            Column(modifier = modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize()) {
 
-                NormalTextComponent(value = stringResource(id = R.string.hello))
+                NormalTextComponent(
+                    value = stringResource(id = R.string.hello),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 40.dp)
+                )
                 HeadingTextComponent(value = stringResource(id = R.string.create_account))
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -154,7 +159,7 @@ fun SignUpScreen(
 
 }
 
-@Preview
+@Preview(device = "id:pixel_6a")
 @Composable
 fun DefaultPreviewOfSignUpScreen() {
     SignUpScreen(rememberNavController())

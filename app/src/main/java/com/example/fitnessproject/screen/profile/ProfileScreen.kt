@@ -62,6 +62,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.BottomNavigationBar
+import com.example.fitnessproject.components.ButtonComponent
 import com.example.fitnessproject.database.firebase.UserFirebase
 import com.example.fitnessproject.model.User
 import com.example.fitnessproject.navigation.Routes
@@ -80,69 +81,77 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ProfileScreen(navController: NavController) {
     val context = LocalContext.current
-    val userId = Firebase.auth.currentUser!!.uid
+    val userId = Firebase.auth.currentUser?.uid
     val user = remember { mutableStateOf<User?>(null) }
 
-    LaunchedEffect(userId) {
-        val fetchedUser = withContext(Dispatchers.IO) {
-            UserFirebase().getUserData(userId)
+    if (userId == null) {
+        // Redirect to login screen or handle the case when the user is null
+        LaunchedEffect(Unit) {
+            navController.navigate(Routes.LOGIN) {
+                popUpTo(0) // This clears the backstack
+            }
         }
-        user.value = fetchedUser
+    } else {
+        // Fetch user data if userId is not null
+        LaunchedEffect(userId) {
+            val fetchedUser = withContext(Dispatchers.IO) {
+                UserFirebase().getUserData(userId)
+            }
+            user.value = fetchedUser
+        }
     }
 
-        var selectedItemIndex by rememberSaveable { mutableStateOf(2) }
-        // Replace Column with LazyColumn for scrollability
-        Scaffold(
-            bottomBar = {
-                BottomNavigationBar(
-                    selectedItemIndex = selectedItemIndex,
-                    onItemSelected = {
-                        selectedItemIndex = it
-                    },
-                    navController = navController
-                )
-            }
-        ) { innerPadding ->
-
-
-
-
-    if (user.value != null) {
-        // Display user data
-        Log.d("debug", "User data: ${user.value}")
-        val userdata = user.value!!
-        val coroutineScope = rememberCoroutineScope()
-
-        var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-        var firstName by remember { mutableStateOf(userdata.firstName) }
-        var lastName by remember { mutableStateOf(userdata.lastName) }
-        var weight by remember { mutableStateOf(userdata.weight.toString()) }
-        var height by remember { mutableStateOf(userdata.height.toString()) }
-        var goalWeight by remember { mutableStateOf(userdata.goalWeight.toString()) }
-        var age by remember { mutableStateOf(userdata.age.toString()) }
-        var password by remember { mutableStateOf("") }
-
-        // Edit state variables
-        var isEditingFirstName by remember { mutableStateOf(false) }
-        var isEditingLastName by remember { mutableStateOf(false) }
-        var isEditingWeight by remember { mutableStateOf(false) }
-        var isEditingGoalWeight by remember { mutableStateOf(false) }
-        var isEditingHeight by remember { mutableStateOf(false) }
-        var isEditingAge by remember { mutableStateOf(false) }
-        var isEditingPassword by remember { mutableStateOf(false) }
-
-        // Error states
-        var weightError by remember { mutableStateOf(false) }
-        var goalWeightError by remember { mutableStateOf(false) }
-        var heightError by remember { mutableStateOf(false) }
-        var ageError by remember { mutableStateOf(false) }
-
-        // Launcher for image selection
-        val launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.GetContent()
-        ) { uri: Uri? ->
-            selectedImageUri = uri
+    var selectedItemIndex by rememberSaveable { mutableStateOf(2) }
+    // Replace Column with LazyColumn for scrollability
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                selectedItemIndex = selectedItemIndex,
+                onItemSelected = {
+                    selectedItemIndex = it
+                },
+                navController = navController
+            )
         }
+    ) { innerPadding ->
+
+
+        if (user.value != null) {
+            // Display user data
+            Log.d("debug", "User data: ${user.value}")
+            val userdata = user.value!!
+            val coroutineScope = rememberCoroutineScope()
+
+            var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+            var firstName by remember { mutableStateOf(userdata.firstName) }
+            var lastName by remember { mutableStateOf(userdata.lastName) }
+            var weight by remember { mutableStateOf(userdata.weight.toString()) }
+            var height by remember { mutableStateOf(userdata.height.toString()) }
+            var goalWeight by remember { mutableStateOf(userdata.goalWeight.toString()) }
+            var age by remember { mutableStateOf(userdata.age.toString()) }
+            var password by remember { mutableStateOf("") }
+
+            // Edit state variables
+            var isEditingFirstName by remember { mutableStateOf(false) }
+            var isEditingLastName by remember { mutableStateOf(false) }
+            var isEditingWeight by remember { mutableStateOf(false) }
+            var isEditingGoalWeight by remember { mutableStateOf(false) }
+            var isEditingHeight by remember { mutableStateOf(false) }
+            var isEditingAge by remember { mutableStateOf(false) }
+            var isEditingPassword by remember { mutableStateOf(false) }
+
+            // Error states
+            var weightError by remember { mutableStateOf(false) }
+            var goalWeightError by remember { mutableStateOf(false) }
+            var heightError by remember { mutableStateOf(false) }
+            var ageError by remember { mutableStateOf(false) }
+
+            // Launcher for image selection
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.GetContent()
+            ) { uri: Uri? ->
+                selectedImageUri = uri
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -313,7 +322,12 @@ fun ProfileScreen(navController: NavController) {
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Button(onClick = {
+                        ButtonComponent(
+                            value = "Save Changes",
+                            isEnabled = true,
+                            modifier = Modifier
+                                .padding(start = 8.dp),
+                        ) {
                             // Launch the coroutine when the button is clicked
                             coroutineScope.launch {
                                 updateData(
@@ -325,11 +339,11 @@ fun ProfileScreen(navController: NavController) {
                                     weight = weight,
                                     goalWeight = goalWeight
                                 )
-                            }
 
-                        }) {
-                            Text(text = "Save changes")
+                            }
                         }
+
+
                     }
                 }
                 // Statistics Section
@@ -469,14 +483,15 @@ fun ProfileScreen(navController: NavController) {
                     }
                 }
             }
+        } else {
+            // Show loading or error message
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
-        else {
-        // Show loading or error message
-        Box(modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    }
     }
 }
 
@@ -742,9 +757,9 @@ suspend fun updateData(
         false
     }
     if (success) {
-        Toast.makeText(context,"Data updated successfully", Toast.LENGTH_SHORT).show()
-    }else{
-        Toast.makeText(context,"Error updating data", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show()
+    } else {
+        Toast.makeText(context, "Error updating data", Toast.LENGTH_SHORT).show()
     }
 }
 
