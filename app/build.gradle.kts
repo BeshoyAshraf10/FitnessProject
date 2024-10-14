@@ -82,6 +82,7 @@ dependencies {
     implementation (libs.converter.gson)
     //Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    implementation(libs.accompanist.permissions)
     //Room
     implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
@@ -93,7 +94,5 @@ dependencies {
     implementation (libs.firebase.auth)
 
     implementation ("io.coil-kt:coil-compose:2.0.0")
-
-
 
 }

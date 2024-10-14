@@ -1,6 +1,5 @@
 package com.example.fitnessproject.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -9,6 +8,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -53,6 +53,30 @@ fun FitnessProjectTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+        content = content
+    )
+}
+
+private val DarkColors = darkColorScheme(
+    primary = Color(0xFFBB86FC),
+    onPrimary = Color.Black,
+    // Add other color definitions as needed
+)
+private val LightColors = lightColorScheme(
+    primary = Color(0xFF6200EE),
+    onPrimary = Color.White,
+    // Add other color definitions as needed
+)
+@Composable
+fun StepsTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    val colors = if (darkTheme) DarkColors else LightColors
+
+    MaterialTheme(
+        colorScheme = colors,
+        typography = Typography, // Ensure Typography is defined
         content = content
     )
 }
