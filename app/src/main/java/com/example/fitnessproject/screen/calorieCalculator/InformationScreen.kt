@@ -103,7 +103,6 @@ fun InformationScreen(navController: NavController) {
                         label = "Enter your age",
                         value = age,
                         onValueChange = { age = it })
-
                 }
 
                 Card(
@@ -199,9 +198,7 @@ fun InformationScreen(navController: NavController) {
                     if (checkedOption == CheckboxOption.Male) {
                         result = when (selectedItem) {
                             options[0] -> (calculateBMRForMen(
-                                weight = weight,
-                                height = height,
-                                age = age
+                                weight = weight, height = height, age = age
                             ) * 1.2).toInt()
 
                             options[1] -> (calculateBMRForMen(
@@ -271,14 +268,15 @@ fun InformationScreen(navController: NavController) {
                 val context = LocalContext.current
 
                 fun myToast() {
-                    val text = "Please fill the missing fields"
-                    val duration = Toast.LENGTH_SHORT
-                    val toast = Toast.makeText(context, text, duration)
+                    val toast = Toast.makeText(
+                        context,
+                        "Please fill the missing fields",
+                        Toast.LENGTH_SHORT
+                    )
                     toast.show()
                 }
                 Button(
                     onClick = {
-
                         try {
                             if (checkedOption != null) {
                                 val calories = calculateTopScreenCalorie()
@@ -290,10 +288,7 @@ fun InformationScreen(navController: NavController) {
                                 val bmi = calculateBMI(weight, height)
                                 navController.navigate(
                                     "${Routes.SECOND_SCREEN}/$calories/${bmr.toInt()}/${
-                                        String.format(
-                                            "%.2f",
-                                            bmi * 100
-                                        ).toFloat()
+                                        String.format("%.2f", bmi * 100).toFloat()
                                     }"
                                 )
                             } else
