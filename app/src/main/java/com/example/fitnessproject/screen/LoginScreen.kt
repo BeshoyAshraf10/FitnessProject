@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 //import androidx.compose.material.CircularProgressIndicator
 //import androidx.compose.material.Surface
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -72,18 +73,20 @@ fun LoginScreen(
     ) {
 
         Surface(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(28.dp)
         ) {
 
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
             ) {
 
-                NormalTextComponent(value = stringResource(id = R.string.login))
+                NormalTextComponent(value = stringResource(id = R.string.login), modifier = modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 40.dp))
                 HeadingTextComponent(value = stringResource(id = R.string.welcome))
                 Spacer(modifier = Modifier.height(20.dp))
 

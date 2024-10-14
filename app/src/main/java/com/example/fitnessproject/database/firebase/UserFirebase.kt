@@ -11,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class UserData {
+class UserFirebase {
     private val database: DatabaseReference = Firebase.database.reference
     private val db = Firebase.firestore
 

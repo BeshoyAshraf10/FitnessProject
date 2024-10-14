@@ -2,6 +2,5 @@
 <resources>
 
     <style name="Theme.FitnessProject" parent="android:Theme.Material.Light.NoActionBar" >
-        <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
 </resources>
