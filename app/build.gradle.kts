@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -83,10 +85,14 @@ dependencies {
     //Room
     implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
+    //Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
     implementation(libs.kotlinx.coroutines.android)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation (libs.firebase.auth)
+
+    implementation ("io.coil-kt:coil-compose:2.0.0")
 
 
 

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitnessproject.localDB.RoomDBHelper
+import com.example.fitnessproject.database.localDB.RoomDBHelper
 import com.example.fitnessproject.model.Activity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ class ActivityViewModel(app: Application): AndroidViewModel(app) {
         selectedActivity = activity
     }
 
-    private val db:RoomDBHelper = RoomDBHelper.getInstance(app)
+    private val db: RoomDBHelper = RoomDBHelper.getInstance(app)
 
     fun upsertActivity(activity: Activity) {
         viewModelScope.launch(Dispatchers.IO){

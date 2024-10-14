@@ -15,14 +15,20 @@ import com.example.fitnessproject.screen.calorieCalculator.CalorieCalculatorScre
 import com.example.fitnessproject.screen.Activities.FinishActivityScreen
 import com.example.fitnessproject.screen.calorieCalculator.InformationScreen
 import com.example.fitnessproject.screen.Activities.StartActivityScreen
+import com.example.fitnessproject.screen.LoadingScreen
 import com.example.fitnessproject.screen.LoginScreen
 import com.example.fitnessproject.screen.SignUpScreen
+import com.example.fitnessproject.screen.activities.ActivitySessionList
 import com.example.fitnessproject.screen.home.HomeScreen
+import com.example.fitnessproject.screen.profile.ProfileScreen
 import com.example.fitnessproject.viewModel.ActivityViewModel
 import com.example.fitnessproject.viewModel.TimerViewModel
 
 object Routes {
+    const val LOADING_SCREEN = "loading_screen"
+    const val ACT_SESSIONS = "ActivitySessions"
     const val HOME_SCREEN = "home"
+    const val PROFILE_SCREEN = "profile"
     const val LOGIN = "login_screen"
     const val SIGNUP = "signUp_screen"
     const val FIRST_SCREEN = "first_screen"
@@ -38,16 +44,23 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
     val navController = rememberNavController()
 
 
-    NavHost(navController = navController, startDestination = Routes.HOME_SCREEN) {
+    NavHost(navController = navController, startDestination = Routes.LOADING_SCREEN) {
+        composable(Routes.LOADING_SCREEN) {
+            LoadingScreen(navController = navController)
+        }
         composable(Routes.LOGIN) {
-            LoginScreen()
+            LoginScreen(navController, modifier = modifier)
         }
         composable(Routes.SIGNUP) {
-            SignUpScreen()
+            SignUpScreen(navController, modifier = modifier)
         }
-        composable(Routes.HOME_SCREEN){
+        composable(Routes.HOME_SCREEN) {
             HomeScreen(navController)
         }
+        composable(Routes.PROFILE_SCREEN) {
+            ProfileScreen(navController)
+        }
+
         composable(Routes.FIRST_SCREEN) {
             InformationScreen(navController)
         }
@@ -59,48 +72,75 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
                 navArgument("bmi") { type = NavType.FloatType }
             )
         ) { backStackEntry ->
-            val calories = backStackEntry.arguments?.getInt("calories")?:0
-            val bmr = backStackEntry.arguments?.getInt("bmr")?:0
-            val bmi = backStackEntry.arguments?.getFloat("bmi")?:0f
+            val calories = backStackEntry.arguments?.getInt("calories") ?: 0
+            val bmr = backStackEntry.arguments?.getInt("bmr") ?: 0
+            val bmi = backStackEntry.arguments?.getFloat("bmi") ?: 0f
 
             CalorieCalculatorScreen2(calories = calories, bmr = bmr, bmi = bmi)
         }
-        composable(route = Routes.ACT_LIST) { ActivitiesListScreen(
-            ActivitiesData().getActivitiesNames(),
-            navController = navController,
-            modifier = modifier
-        ) }
+        composable(route = Routes.ACT_LIST) {
+            ActivitiesListScreen(
+                ActivitiesData().getActivitiesNames(),
+                navController = navController,
+                modifier = modifier
+            )
+        }
         composable(
             route = "${Routes.ACT_TYPES}/{activity}/{icon}",
             arguments = listOf(
-                navArgument("activity") {type = NavType.StringType},
-                navArgument("icon") {type = NavType.IntType}
+                navArgument("activity") { type = NavType.StringType },
+                navArgument("icon") { type = NavType.IntType }
             )
         ) {
             val activity = it.arguments?.getString("activity")
             val icon = it.arguments?.getInt("icon")
-            ActivityTypes(activity!!,icon!!,navController,modifier = modifier,activityViewModel = activityViewModel)
+            ActivityTypes(
+                activity!!,
+                icon!!,
+                navController,
+                modifier = modifier,
+                activityViewModel = activityViewModel
+            )
         }
 //
         composable(
             route = Routes.START_ACTIVITY,
         ) {
-            StartActivityScreen( TimerViewModel(),navController,modifier = modifier,activityViewModel = activityViewModel)
+            StartActivityScreen(
+                TimerViewModel(),
+                navController,
+                modifier = modifier,
+                activityViewModel = activityViewModel
+            )
         }
         composable(
             route = "${Routes.FINISH_ACTIVITY}/{time}/{calories}/{timeStarted}/{timeEnded}",
             arguments = listOf(
-                navArgument("time") {type = NavType.LongType},
-                navArgument("calories") {type = NavType.IntType},
-                navArgument("timeStarted") {type = NavType.LongType},
-                navArgument("timeEnded") {type = NavType.LongType}
+                navArgument("time") { type = NavType.LongType },
+                navArgument("calories") { type = NavType.IntType },
+                navArgument("timeStarted") { type = NavType.LongType },
+                navArgument("timeEnded") { type = NavType.LongType }
             )
-        ){
+        ) {
             val time = it.arguments?.getLong("time")
             val calories = it.arguments?.getInt("calories")
             val timeStarted = it.arguments?.getLong("timeStarted")
             val timeEnded = it.arguments?.getLong("timeEnded")
-            FinishActivityScreen(time!!,calories!!,timeStarted!!,timeEnded!!,navController,modifier = modifier,activityViewModel = activityViewModel)
+            FinishActivityScreen(
+                time!!,
+                calories!!,
+                timeStarted!!,
+                timeEnded!!,
+                navController,
+                modifier = modifier,
+                activityViewModel = activityViewModel
+            )
+        }
+        composable(route = Routes.ACT_SESSIONS) {
+            ActivitySessionList(
+                navController = navController,
+                modifier = modifier
+            )
         }
     }
 }

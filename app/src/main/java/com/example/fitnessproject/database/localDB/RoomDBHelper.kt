@@ -1,4 +1,4 @@
-package com.example.fitnessproject.localDB
+package com.example.fitnessproject.database.localDB
 
 import android.content.Context
 import androidx.room.Database

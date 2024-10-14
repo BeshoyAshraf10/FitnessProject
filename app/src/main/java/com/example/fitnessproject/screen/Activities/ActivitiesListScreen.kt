@@ -15,6 +15,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.fitnessproject.components.BottomNavigationBar
 import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.data.ActivitiesData
 import com.example.fitnessproject.model.Activity
@@ -37,7 +42,18 @@ fun ActivitiesListScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
+
+    Scaffold(bottomBar =
+    {
+        BottomNavigationBar(
+            selectedItemIndex = selectedItemIndex,
+            onItemSelected = {
+                selectedItemIndex = it
+            },
+            navController = navController
+        )
+    },modifier = Modifier.fillMaxSize()) { innerPadding ->
         LazyColumn(
             modifier = modifier
                 .padding(innerPadding)

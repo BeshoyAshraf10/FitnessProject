@@ -29,17 +29,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
+import com.example.fitnessproject.components.BottomNavigationBar
+import com.example.fitnessproject.navigation.Routes
 
 val selectedColor: Color = Color.White
 
-data class BottomNavigationItem(
-    val title: String,
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-)
-
-// Main home screen composable
 @Composable
 fun HomeScreen(navController: NavController) {
     var selectedItemIndex by rememberSaveable { mutableStateOf(1) }
@@ -48,7 +42,10 @@ fun HomeScreen(navController: NavController) {
         bottomBar = {
             BottomNavigationBar(
                 selectedItemIndex = selectedItemIndex,
-                onItemSelected = { selectedItemIndex = it }
+                onItemSelected = {
+                    selectedItemIndex = it
+                },
+                navController = navController
             )
         }
     ) { innerPadding ->
@@ -63,83 +60,47 @@ fun HomeScreen(navController: NavController) {
                 .padding(horizontal = 16.dp, vertical = 20.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            CardItem(title = "Steps", imageRes = R.drawable.steps, screenWidth)
+            CardItem(title = "Steps", imageRes = R.drawable.steps, screenWidth) {
+
+            }
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Activities", imageRes = R.drawable.activities, screenWidth)
+            CardItem(title = "Activities", imageRes = R.drawable.activities, screenWidth) {
+                navController.navigate(Routes.ACT_SESSIONS)
+            }
+//            Spacer(modifier = Modifier.height(16.dp))
+//            CardItem(
+//                title = "Calories & Nutrition",
+//                imageRes = R.drawable.nutritionjpg,
+//                screenWidth
+//            ) {
+//
+//            }
+
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Calories & Nutrition", imageRes = R.drawable.nutritionjpg, screenWidth)
-            Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Update Weight", imageRes = R.drawable.weight, screenWidth)
+            CardItem(title = "Update Weight", imageRes = R.drawable.weight, screenWidth) {
+                navController.navigate(Routes.FIRST_SCREEN)
+            }
         }
     }
 }
 
 // Bottom navigation bar composable with the list embedded
-@Composable
-fun BottomNavigationBar(
-    selectedItemIndex: Int,
-    onItemSelected: (Int) -> Unit
-) {
-    val items = listOf(
-        BottomNavigationItem(
-            title = "Exercises",
-            selectedIcon = Icons.Filled.DateRange,
-            unselectedIcon = Icons.Outlined.DateRange,
-            hasNews = false
-        ),
-        BottomNavigationItem(
-            title = "Home",
-            selectedIcon = Icons.Filled.Home,
-            unselectedIcon = Icons.Outlined.Home,
-            hasNews = false
-        ),
-        BottomNavigationItem(
-            title = "Profile",
-            selectedIcon = Icons.Filled.Person,
-            unselectedIcon = Icons.Outlined.Person,
-            hasNews = false
-        ),
-    )
 
-    NavigationBar(
-        modifier = Modifier.height(110.dp),
-        containerColor = Color.White,
-        contentColor = Color.Blue
-    ) {
-        items.forEachIndexed { index, item ->
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        if (index == selectedItemIndex) item.selectedIcon else item.unselectedIcon,
-                        contentDescription = item.title
-                    )
-                },
-                label = { Text(item.title) },
-                selected = index == selectedItemIndex,
-                onClick = { onItemSelected(index) },
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = selectedColor
-                )
-            )
-        }
-    }
-}
 
 // CardItem remains the same
 @Composable
-fun CardItem(title: String, imageRes: Int, screenWidth: Dp) {
+fun CardItem(title: String, imageRes: Int, screenWidth: Dp, onNavigate: () -> Unit) {
     val cardHeight = screenWidth * 0.4f
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(cardHeight)
             .padding(horizontal = 8.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray),
+        onClick = onNavigate
     ) {
         Box {
-            // Your image and title layout
             Image(
                 painter = painterResource(id = imageRes),
                 contentDescription = title,
