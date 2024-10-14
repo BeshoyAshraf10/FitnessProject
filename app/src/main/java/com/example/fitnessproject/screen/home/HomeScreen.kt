@@ -67,18 +67,18 @@ fun HomeScreen(navController: NavController) {
             CardItem(title = "Activities", imageRes = R.drawable.activities, screenWidth) {
                 navController.navigate(Routes.ACT_SESSIONS)
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            CardItem(
-                title = "Calories & Nutrition",
-                imageRes = R.drawable.nutritionjpg,
-                screenWidth
-            ) {
-
-            }
+//            Spacer(modifier = Modifier.height(16.dp))
+//            CardItem(
+//                title = "Calories & Nutrition",
+//                imageRes = R.drawable.nutritionjpg,
+//                screenWidth
+//            ) {
+//
+//            }
 
             Spacer(modifier = Modifier.height(16.dp))
             CardItem(title = "Update Weight", imageRes = R.drawable.weight, screenWidth) {
-
+                navController.navigate(Routes.FIRST_SCREEN)
             }
         }
     }

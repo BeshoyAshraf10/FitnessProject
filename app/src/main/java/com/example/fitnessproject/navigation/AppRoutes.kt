@@ -18,6 +18,7 @@ import com.example.fitnessproject.screen.Activities.StartActivityScreen
 import com.example.fitnessproject.screen.LoadingScreen
 import com.example.fitnessproject.screen.LoginScreen
 import com.example.fitnessproject.screen.SignUpScreen
+import com.example.fitnessproject.screen.activities.ActivitySessionList
 import com.example.fitnessproject.screen.home.HomeScreen
 import com.example.fitnessproject.screen.profile.ProfileScreen
 import com.example.fitnessproject.viewModel.ActivityViewModel
@@ -135,6 +136,11 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
                 activityViewModel = activityViewModel
             )
         }
-        composable(route = Routes.ACT_SESSIONS) { }
+        composable(route = Routes.ACT_SESSIONS) {
+            ActivitySessionList(
+                navController = navController,
+                modifier = modifier
+            )
+        }
     }
 }

@@ -98,6 +98,23 @@ fun ProfileScreen(navController: NavController) {
         user.value = fetchedUser
     }
 
+        var selectedItemIndex by rememberSaveable { mutableStateOf(2) }
+        // Replace Column with LazyColumn for scrollability
+        Scaffold(
+            bottomBar = {
+                BottomNavigationBar(
+                    selectedItemIndex = selectedItemIndex,
+                    onItemSelected = {
+                        selectedItemIndex = it
+                    },
+                    navController = navController
+                )
+            }
+        ) { innerPadding ->
+
+
+
+
     if (user.value != null) {
         // Display user data
         Log.d("debug", "User data: ${user.value}")
@@ -134,19 +151,6 @@ fun ProfileScreen(navController: NavController) {
         ) { uri: Uri? ->
             selectedImageUri = uri
         }
-        var selectedItemIndex by rememberSaveable { mutableStateOf(2) }
-        // Replace Column with LazyColumn for scrollability
-        Scaffold(
-            bottomBar = {
-                BottomNavigationBar(
-                    selectedItemIndex = selectedItemIndex,
-                    onItemSelected = {
-                        selectedItemIndex = it
-                    },
-                    navController = navController
-                )
-            }
-        ) { innerPadding ->
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -474,14 +478,16 @@ fun ProfileScreen(navController: NavController) {
                 }
             }
         }
-    } else {
+        else {
         // Show loading or error message
         Box(modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     }
+    }
 }
+
 
 @Composable
 fun EditableRow(
