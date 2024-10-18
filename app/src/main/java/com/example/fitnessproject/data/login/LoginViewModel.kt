@@ -11,7 +11,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.data.rules.Validator
-import com.example.fitnessproject.navigation.PostOfficeAppRouter
 import com.example.fitnessproject.navigation.Routes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth

@@ -1,5 +1,6 @@
 package com.example.fitnessproject.screen.calorieCalculator
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -93,7 +94,7 @@ fun InformationScreen(navController: NavController) {
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Calorie Calculator",
+                    text = "TDEE Calculator",
                     fontFamily = FontFamily(Font(R.font.roboto_bold)),
                     fontSize = 32.sp
                 )
@@ -296,28 +297,18 @@ fun InformationScreen(navController: NavController) {
                                 }
                                 val bmi = calculateBMI(weight, height)
 
-                                UserFirebase().addUserData(
-                                    Firebase.auth.currentUser!!.uid,
-                                    age.toInt(),
-                                    height.toInt(),
-                                    weight.toInt(),
-                                    checkedOption.toString(),
-                                    bmi,
-                                    bmr,
-                                    selectedItem,
-                                    calories
-                                )
 
                                 navController.navigate(
                                     "${Routes.SECOND_SCREEN}/$calories/${bmr.toInt()}/${
                                         String.format("%.2f", bmi * 100).toFloat()
-                                    }"
+                                    }/${age.toInt()}/${height.toInt()}/${weight.toInt()}/${checkedOption.toString()}"
                                 )
                             } else {
                                 myToast()
                             }
                         } catch (e: Exception) {
                             myToast()
+                            Log.d("Error", e.toString())
                         }
                     }
                 )

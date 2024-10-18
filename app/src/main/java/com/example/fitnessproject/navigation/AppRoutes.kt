@@ -3,6 +3,7 @@ package com.example.fitnessproject.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,6 +20,7 @@ import com.example.fitnessproject.screen.LoadingScreen
 import com.example.fitnessproject.screen.LoginScreen
 import com.example.fitnessproject.screen.SignUpScreen
 import com.example.fitnessproject.screen.activities.ActivitySessionList
+
 import com.example.fitnessproject.screen.home.HomeScreen
 import com.example.fitnessproject.screen.profile.ProfileScreen
 import com.example.fitnessproject.viewModel.ActivityViewModel
@@ -40,9 +42,11 @@ object Routes {
 }
 
 @Composable
-fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewModel = viewModel()) {
-    val navController = rememberNavController()
-
+fun AppNavHost(
+    navController: NavHostController,
+    activityViewModel: ActivityViewModel,
+    modifier: Modifier = Modifier
+) {
 
     NavHost(navController = navController, startDestination = Routes.LOADING_SCREEN) {
         composable(Routes.LOADING_SCREEN) {
@@ -65,18 +69,37 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
             InformationScreen(navController)
         }
         composable(
-            route = "${Routes.SECOND_SCREEN}/{calories}/{bmr}/{bmi}",
+            route = "${Routes.SECOND_SCREEN}/{calories}/{bmr}/{bmi}/{age}/{height}/{weight}/{gender}",
             arguments = listOf(
                 navArgument("calories") { type = NavType.IntType },
                 navArgument("bmr") { type = NavType.IntType },
-                navArgument("bmi") { type = NavType.FloatType }
+                navArgument("bmi") { type = NavType.FloatType },
+                navArgument("age") { type = NavType.IntType },
+                navArgument("height") { type = NavType.IntType },
+                navArgument("weight") { type = NavType.IntType },
+                navArgument("gender") { type = NavType.StringType }
+
+
             )
         ) { backStackEntry ->
             val calories = backStackEntry.arguments?.getInt("calories") ?: 0
             val bmr = backStackEntry.arguments?.getInt("bmr") ?: 0
             val bmi = backStackEntry.arguments?.getFloat("bmi") ?: 0f
+            val age = backStackEntry.arguments?.getInt("age") ?: 0
+            val height = backStackEntry.arguments?.getInt("height") ?: 0
+            val weight = backStackEntry.arguments?.getInt("weight") ?: 0
+            val gender = backStackEntry.arguments?.getString("gender") ?: ""
 
-            CalorieCalculatorScreen2(calories = calories, bmr = bmr, bmi = bmi)
+            CalorieCalculatorScreen2(
+                calories = calories,
+                bmr = bmr,
+                bmi = bmi,
+                age,
+                height,
+                weight,
+                gender,
+                navController
+            )
         }
         composable(route = Routes.ACT_LIST) {
             ActivitiesListScreen(
@@ -139,7 +162,8 @@ fun AppNavHost(modifier: Modifier = Modifier, activityViewModel: ActivityViewMod
         composable(route = Routes.ACT_SESSIONS) {
             ActivitySessionList(
                 navController = navController,
-                modifier = modifier
+                modifier = modifier,
+                viewModel = activityViewModel
             )
         }
     }

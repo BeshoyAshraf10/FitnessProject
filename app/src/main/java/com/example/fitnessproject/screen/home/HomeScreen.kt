@@ -1,6 +1,7 @@
 package com.example.fitnessproject.screen.home
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -80,7 +81,7 @@ fun HomeScreen(navController: NavController) {
 //            }
 
             Spacer(modifier = Modifier.height(16.dp))
-            CardItem(title = "Update Data", imageRes = R.drawable.weight, screenWidth) {
+            CardItem(title = "TDEE Calculate", imageRes = R.drawable.weight, screenWidth) {
                 navController.navigate(Routes.FIRST_SCREEN)
             }
         }
@@ -130,7 +131,9 @@ fun CardItem(title: String, imageRes: Int, screenWidth: Dp, onNavigate: () -> Un
     }
 }
 
-@Preview
+@Preview(showBackground = false,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 private fun HomePrev() {
     HomeScreen(rememberNavController())
