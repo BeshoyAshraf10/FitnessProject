@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.ButtonComponent
@@ -111,9 +112,9 @@ fun ActivitySessionItem(
 
 @Composable
 fun ActivitySessionList(
-    navController: NavController,
-    modifier: Modifier = Modifier,
-    viewModel: ActivityViewModel = viewModel()
+    navController: NavHostController,
+    modifier: Modifier,
+    viewModel: ActivityViewModel
 ) {
     val activities by viewModel.getActivities().collectAsState(initial = emptyList())
     Column(

@@ -25,9 +25,9 @@ import com.example.fitnessproject.data.signup.SignupViewModel
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.*
 import com.example.fitnessproject.data.signup.SignupUIEvent
-import com.example.fitnessproject.navigation.PostOfficeAppRouter
+//import com.example.fitnessproject.navigation.PostOfficeAppRouter
 import com.example.fitnessproject.navigation.Routes
-import com.example.fitnessproject.navigation.Screen
+//import com.example.fitnessproject.navigation.Screen
 import com.example.fitnessproject.navigation.SystemBackButtonHandler
 
 
@@ -48,7 +48,7 @@ fun SignUpScreen(
                     Toast.LENGTH_SHORT
                 ).show()
                 navController.popBackStack()
-                navController.navigate(Routes.FIRST_SCREEN)
+                navController.navigate(Routes.HOME_SCREEN)
             } else if (signupViewModel.signUpError.value.isNotEmpty()) {
                 Toast.makeText(
                     context,
@@ -118,7 +118,7 @@ fun SignUpScreen(
 
                 CheckboxComponent(value = stringResource(id = R.string.terms_and_conditions),
                     onTextSelected = {
-                        PostOfficeAppRouter.navigateTo(Screen.TermsAndConditionsScreen)
+//                        PostOfficeAppRouter.navigateTo(Screen.TermsAndConditionsScreen)
                     },
                     onCheckedChange = {
                         signupViewModel.onEvent(SignupUIEvent.PrivacyPolicyCheckBoxClicked(it))

@@ -174,3 +174,4 @@ fun Long.formatTime(): String {
 fun calculateCaloriesPerSecond(caloriesPerHour: Int): Double {
     return caloriesPerHour / 3600.0
 }
+

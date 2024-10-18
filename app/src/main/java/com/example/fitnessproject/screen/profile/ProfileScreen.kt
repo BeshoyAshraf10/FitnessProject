@@ -130,6 +130,10 @@ fun ProfileScreen(navController: NavController) {
             var goalWeight by remember { mutableStateOf(userdata.goalWeight.toString()) }
             var age by remember { mutableStateOf(userdata.age.toString()) }
             var password by remember { mutableStateOf("") }
+            var bmi by remember { mutableStateOf(String.format("%.2f", userdata.bmi)) }
+            var bmr by remember { mutableStateOf(userdata.bmr.toString()) }
+            var calories by remember { mutableStateOf(userdata.calories.toString()) }
+            var bwb by remember { mutableStateOf(userdata.bwb) }
 
             // Edit state variables
             var isEditingFirstName by remember { mutableStateOf(false) }
@@ -307,15 +311,15 @@ fun ProfileScreen(navController: NavController) {
                     )
                 }
 
-                item {
-                    EditablePasswordRow(
-                        label = "Password",
-                        value = password,
-                        isEditing = isEditingPassword,
-                        onValueChange = { password = it },
-                        onEditingChange = { isEditingPassword = it }
-                    )
-                }
+//                item {
+//                    EditablePasswordRow(
+//                        label = "Password",
+//                        value = password,
+//                        isEditing = isEditingPassword,
+//                        onValueChange = { password = it },
+//                        onEditingChange = { isEditingPassword = it }
+//                    )
+//                }
 
                 item {
                     Box(
@@ -376,8 +380,8 @@ fun ProfileScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Height", color = White, fontWeight = FontWeight.Bold)
-                                Text(height, color = White)
+                                Text("BMI", color = White, fontWeight = FontWeight.Bold)
+                                Text(bmi, color = White)
                             }
                         }
 
@@ -406,8 +410,8 @@ fun ProfileScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Current Weight", color = White, fontWeight = FontWeight.Bold)
-                                Text(weight, color = White)
+                                Text("BMR", color = White, fontWeight = FontWeight.Bold)
+                                Text(bmr, color = White)
                             }
                         }
                     }
@@ -443,8 +447,8 @@ fun ProfileScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Goal Weight", color = White, fontWeight = FontWeight.Bold)
-                                Text(goalWeight, color = White)
+                                Text("BWB", color = White, fontWeight = FontWeight.Bold)
+                                Text(bwb, color = White)
                             }
                         }
 
@@ -473,9 +477,9 @@ fun ProfileScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Calories Burned", color = White, fontWeight = FontWeight.Bold)
+                                Text("Calories", color = White, fontWeight = FontWeight.Bold)
                                 Text(
-                                    "500 cal",
+                                    calories,
                                     color = White
                                 ) // You can update this value based on your logic
                             }

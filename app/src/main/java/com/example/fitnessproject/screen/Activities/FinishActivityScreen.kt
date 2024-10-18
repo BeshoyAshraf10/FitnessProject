@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fitnessproject.components.ButtonComponent
 import com.example.fitnessproject.database.localDB.DateConverter
+import com.example.fitnessproject.notification.setAlarm
 import com.example.fitnessproject.viewModel.ActivityViewModel
 
 @Composable
@@ -34,6 +36,7 @@ fun FinishActivityScreen(
     modifier: Modifier = Modifier,
     activityViewModel: ActivityViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
@@ -96,6 +99,7 @@ fun FinishActivityScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 80.dp),
                 ){
+                    setAlarm(context,activityViewModel.selectedActivity!!.name,"Activity finished")
                     saveActivitySession(
                         activityViewModel,
                         timeStarted,
