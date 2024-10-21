@@ -44,7 +44,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
 import com.example.fitnessproject.Routes
-import com.example.fitnessproject.ui.theme.TDEEBabyBlue
 import com.example.fitnessproject.ui.theme.TDEEBlue
 
 
@@ -93,45 +92,25 @@ fun InformationScreen(navController: NavController) {
                     fontSize = 32.sp
                 )
 
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                ) {
+
                     OutlinedInputField(
                         label = "Enter your age",
                         value = age,
                         onValueChange = { age = it })
-                }
 
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                {
+
                     OutlinedInputField(
                         label = "Enter your height",
                         value = height,
                         onValueChange = { height = it })
 
-                }
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 6.dp)
-                ) {
+
 
                     OutlinedInputField(
                         label = "Enter your Weight",
                         value = weight,
                         onValueChange = { weight = it })
 
-                }
                 Row(
                     verticalAlignment = CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround,
@@ -142,18 +121,14 @@ fun InformationScreen(navController: NavController) {
                         fontFamily = FontFamily(Font(R.font.roboto_medium)),
                         modifier = Modifier.padding(end = 16.dp)
                     )
-                    Row(verticalAlignment = CenterVertically) {
                         GenderCheckbox(
                             CheckboxOption.Male,
                             checkedOption,
                         ) { checkedOption = it }
-                    }
-                    Row(verticalAlignment = CenterVertically) {
                         GenderCheckbox(
                             CheckboxOption.Female,
                             checkedOption,
                         ) { checkedOption = it }
-                    }
                 }
 
                 Row(
