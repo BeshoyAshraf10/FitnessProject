@@ -20,13 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.example.fitnessproject.R
 import com.example.fitnessproject.activityApi.ActivityCallable
-import com.example.fitnessproject.Routes
-import com.example.fitnessproject.data.ActivitiesData
+import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.model.Activity
+import com.example.fitnessproject.viewModel.ActivityViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,14 +34,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Composable
 fun ActivityTypes(
-    activityString: String,
+    activityName: String,
+    icon: Int,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    activityViewModel: ActivityViewModel = viewModel()
 ) {
     var activities by remember { mutableStateOf(listOf<Activity>()) }
-    val activityObj = ActivitiesData().parseActivityFromString(activityString)
-    val activityName = activityObj?.name ?: ""
+//    val activityObj = ActivitiesData().parseActivityFromString(activityString)
+//    val activityName = activityObj?.name ?: ""
     LaunchedEffect(activityName) {
+        Log.d("trace", "Activity name: $activityName")
         loadActivityTypes(activityName) {
             activities = it
         }
@@ -62,10 +64,11 @@ fun ActivityTypes(
                         .padding(start = 16.dp))
                 }
                 items(activities) { activity ->
-                    activity.icon = activityObj?.icon ?: R.drawable.ic_main_sport
+                    activity.icon = icon
                     ActivityItem(activity) {
+                        activityViewModel.selectActivity(activity)
                         navController.popBackStack()
-                        navController.navigate("${Routes.START_ACTIVITY}/${activity}")
+                        navController.navigate(Routes.START_ACTIVITY)
 
 
 
@@ -89,7 +92,7 @@ fun ActivityTypes(
 @Preview(showSystemUi = true)
 @Composable
 private fun ActivityTypesPrev() {
-    ActivityTypes("running", rememberNavController())
+//    ActivityTypes("running", rememberNavController())
 }
 
 fun loadActivityTypes(activityName: String, callback: (List<Activity>) -> Unit) {
@@ -105,8 +108,8 @@ fun loadActivityTypes(activityName: String, callback: (List<Activity>) -> Unit) 
             if (response.isSuccessful) {
                 val activities = response.body() ?: emptyList()
                 callback(activities) // Pass the data to the callback
-            } else {
-                Log.d("trace", "Error: ${response.errorBody()}")
+            } else {val errorBody = response.errorBody()?.string() ?: "Unknown error"
+                Log.d("trace", "Error: $errorBody")
             }
         }
 

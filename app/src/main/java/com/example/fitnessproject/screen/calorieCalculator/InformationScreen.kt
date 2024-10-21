@@ -43,8 +43,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
-import com.example.fitnessproject.Routes
+import com.example.fitnessproject.database.firebase.UserData
+import com.example.fitnessproject.navigation.Routes
+import com.example.fitnessproject.ui.theme.TDEEBabyBlue
 import com.example.fitnessproject.ui.theme.TDEEBlue
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,25 +96,46 @@ fun InformationScreen(navController: NavController) {
                     fontSize = 32.sp
                 )
 
-
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
                     OutlinedInputField(
                         label = "Enter your age",
                         value = age,
                         onValueChange = { age = it })
 
+                }
 
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                {
                     OutlinedInputField(
                         label = "Enter your height",
                         value = height,
                         onValueChange = { height = it })
 
-
+                }
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
+                ) {
 
                     OutlinedInputField(
                         label = "Enter your Weight",
                         value = weight,
                         onValueChange = { weight = it })
 
+                }
                 Row(
                     verticalAlignment = CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround,
@@ -121,14 +146,18 @@ fun InformationScreen(navController: NavController) {
                         fontFamily = FontFamily(Font(R.font.roboto_medium)),
                         modifier = Modifier.padding(end = 16.dp)
                     )
+                    Row(verticalAlignment = CenterVertically) {
                         GenderCheckbox(
                             CheckboxOption.Male,
                             checkedOption,
                         ) { checkedOption = it }
+                    }
+                    Row(verticalAlignment = CenterVertically) {
                         GenderCheckbox(
                             CheckboxOption.Female,
                             checkedOption,
                         ) { checkedOption = it }
+                    }
                 }
 
                 Row(
@@ -173,7 +202,9 @@ fun InformationScreen(navController: NavController) {
                     if (checkedOption == CheckboxOption.Male) {
                         result = when (selectedItem) {
                             options[0] -> (calculateBMRForMen(
-                                weight = weight, height = height, age = age
+                                weight = weight,
+                                height = height,
+                                age = age
                             ) * 1.2).toInt()
 
                             options[1] -> (calculateBMRForMen(
@@ -243,15 +274,14 @@ fun InformationScreen(navController: NavController) {
                 val context = LocalContext.current
 
                 fun myToast() {
-                    val toast = Toast.makeText(
-                        context,
-                        "Please fill the missing fields",
-                        Toast.LENGTH_SHORT
-                    )
+                    val text = "Please fill the missing fields"
+                    val duration = Toast.LENGTH_SHORT
+                    val toast = Toast.makeText(context, text, duration)
                     toast.show()
                 }
                 Button(
                     onClick = {
+
                         try {
                             if (checkedOption != null) {
                                 val calories = calculateTopScreenCalorie()
@@ -261,9 +291,23 @@ fun InformationScreen(navController: NavController) {
                                     calculateBMRForWomen(weight, height, age)
                                 }
                                 val bmi = calculateBMI(weight, height)
+                                UserData().addUserData(
+                                    Firebase.auth.currentUser!!.uid,
+                                    age.toInt(),
+                                    height.toInt(),
+                                    weight.toInt(),
+                                    checkedOption.toString(),
+                                    bmi,
+                                    bmr,
+                                    selectedItem,
+                                    calories
+                                )
                                 navController.navigate(
                                     "${Routes.SECOND_SCREEN}/$calories/${bmr.toInt()}/${
-                                        String.format("%.2f", bmi * 100).toFloat()
+                                        String.format(
+                                            "%.2f",
+                                            bmi * 100
+                                        ).toFloat()
                                     }"
                                 )
                             } else
