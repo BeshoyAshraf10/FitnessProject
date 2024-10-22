@@ -11,7 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val TDEEBlue =Color(0XFF1367c1)
-val  TDEEGray =Color(0XFF98a2ac)
+val TDEEGray =Color(0XFF98a2ac)
 val TDEEBabyBlue=Color(0XFFf3f8fc)
 
 val Primary = Color(0xFF92A3FD)
@@ -29,4 +29,45 @@ val GradientEnd = Color(0xFF42A5F5) // End color for gradient boxes
 val White = Color(0xFFFFFFFF) // White color
 val Red = Color(0xFFFF0000) // Red color for error messages
 val DarkGray = Color(0xFF4A4A4A) // Optional: Dark gray for text or backgrounds
+
+
+val blueLight = Color(0xFFBBDEFB) // Light blue
+val blueDark = Color(0xFF0D47A1)  // Dark blue
+val grayLight = Color(0xFFEEEEEE)  // Light gray
+val grayDark = Color(0xFF424242)   // Dark gray
+val whiteText = Color(0xFFFFFFFF)      // White color
+val accentBlue = Color(0xFF2196F3) // Accent blue
+val errorColor = Color(0xFFF44336) // Error color (red)
+
+sealed class ThemeColors(
+    val background: Color,
+    val surface: Color,
+    val primary: Color,
+    val secondary: Color, // Added secondary color
+    val error: Color,     // Added error color
+    val accent: Color,    // Added accent color
+    val text: Color
+) {
+    data object Night : ThemeColors(
+        background = grayLight,  // Light gray background
+        surface = whiteText,         // White surface for cards/buttons
+        primary = blueDark,      // Dark blue as primary color
+        secondary = GradientStart,    // Light blue as secondary color
+        error = errorColor,      // Error color
+        accent = accentBlue,      // Accent blue color
+        text = Color.Black        // Black text for readability
+    )
+
+    data object Day : ThemeColors(
+        background = grayDark,    // Dark gray background
+        surface = grayLight,      // Light gray surface for cards/buttons
+        primary = blueDark,       // Dark blue as primary color
+        secondary = GradientStart,     // Light blue as secondary color
+        error = errorColor,       // Error color
+        accent = accentBlue,       // Accent blue color
+        text = Color.White         // White text for contrast
+    )
+}
+
+
 

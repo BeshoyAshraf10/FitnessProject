@@ -1,5 +1,6 @@
 package com.example.fitnessproject.screen.calorieCalculator
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -43,7 +45,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.fitnessproject.R
-import com.example.fitnessproject.database.firebase.UserData
+import com.example.fitnessproject.components.ButtonComponent
+import com.example.fitnessproject.database.firebase.UserFirebase
 import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.ui.theme.TDEEBabyBlue
 import com.example.fitnessproject.ui.theme.TDEEBlue
@@ -77,7 +80,7 @@ fun InformationScreen(navController: NavController) {
         Card(
             shape = RoundedCornerShape(16.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
             modifier = Modifier
                 .height(660.dp)
                 .padding(16.dp)
@@ -91,11 +94,16 @@ fun InformationScreen(navController: NavController) {
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Calorie Calculator",
+                    text = "TDEE Calculator",
                     fontFamily = FontFamily(Font(R.font.roboto_bold)),
                     fontSize = 32.sp
                 )
-
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
 
                     OutlinedInputField(
                         label = "Enter your age",
@@ -103,10 +111,28 @@ fun InformationScreen(navController: NavController) {
                         onValueChange = { age = it })
 
 
+
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                {
+
                     OutlinedInputField(
                         label = "Enter your height",
                         value = height,
                         onValueChange = { height = it })
+
+                }
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp)
+                ) {
 
                     OutlinedInputField(
                         label = "Enter your Weight",
@@ -252,9 +278,11 @@ fun InformationScreen(navController: NavController) {
                     val toast = Toast.makeText(context, text, duration)
                     toast.show()
                 }
-                Button(
-                    onClick = {
-
+                ButtonComponent(
+                    value = "Calculate",
+                    isEnabled = true, // Set to true so the button is enabled
+                    modifier = Modifier.padding(top = 16.dp),
+                    onButtonClicked = {
                         try {
                             if (checkedOption != null) {
                                 val calories = calculateTopScreenCalorie()
@@ -264,40 +292,22 @@ fun InformationScreen(navController: NavController) {
                                     calculateBMRForWomen(weight, height, age)
                                 }
                                 val bmi = calculateBMI(weight, height)
-                                UserData().addUserData(
-                                    Firebase.auth.currentUser!!.uid,
-                                    age.toInt(),
-                                    height.toInt(),
-                                    weight.toInt(),
-                                    checkedOption.toString(),
-                                    bmi,
-                                    bmr,
-                                    selectedItem,
-                                    calories
-                                )
+
+
                                 navController.navigate(
                                     "${Routes.SECOND_SCREEN}/$calories/${bmr.toInt()}/${
-                                        String.format(
-                                            "%.2f",
-                                            bmi * 100
-                                        ).toFloat()
-                                    }"
+                                        String.format("%.2f", bmi * 100).toFloat()
+                                    }/${age.toInt()}/${height.toInt()}/${weight.toInt()}/${checkedOption.toString()}"
                                 )
-                            } else
+                            } else {
                                 myToast()
+                            }
                         } catch (e: Exception) {
                             myToast()
+                            Log.d("Error", e.toString())
                         }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = TDEEBlue),
-                    elevation = ButtonDefaults.buttonElevation(4.dp),
-                    modifier = Modifier.padding(top = 16.dp)
-                ) {
-                    Text(
-                        text = "Calculate"
-                    )
-
-                }
+                    }
+                )
             }
         }
     }
@@ -352,16 +362,16 @@ fun OutlinedInputField(label: String, value: String, onValueChange: (String) -> 
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(text = label, color = Color.Gray) },
+        label = { Text(text = label, color = MaterialTheme.colorScheme.onBackground) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         maxLines = 1,
         colors = TextFieldDefaults.colors( //test each one
-            unfocusedContainerColor = Color.Transparent,
-            focusedContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            focusedTextColor = Color.Black,
-            unfocusedTextColor = Color.Black
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            focusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainer,
+            unfocusedIndicatorColor = MaterialTheme.colorScheme.surfaceContainer,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground
         ),
         modifier = Modifier.fillMaxWidth()
     )

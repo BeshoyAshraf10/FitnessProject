@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 //import androidx.compose.material.CircularProgressIndicator
 //import androidx.compose.material.Surface
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,9 +28,9 @@ import com.example.fitnessproject.data.login.LoginViewModel
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.*
 import com.example.fitnessproject.data.login.LoginUIEvent
-import com.example.fitnessproject.navigation.PostOfficeAppRouter
+//import com.example.fitnessproject.navigation.PostOfficeAppRouter
 import com.example.fitnessproject.navigation.Routes
-import com.example.fitnessproject.navigation.Screen
+//import com.example.fitnessproject.navigation.Screen
 import com.example.fitnessproject.navigation.SystemBackButtonHandler
 import com.google.firebase.auth.FirebaseAuth
 
@@ -72,18 +73,20 @@ fun LoginScreen(
     ) {
 
         Surface(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(28.dp)
         ) {
 
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxSize()
             ) {
 
-                NormalTextComponent(value = stringResource(id = R.string.login))
+                NormalTextComponent(value = stringResource(id = R.string.login), modifier = modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 40.dp))
                 HeadingTextComponent(value = stringResource(id = R.string.welcome))
                 Spacer(modifier = Modifier.height(20.dp))
 

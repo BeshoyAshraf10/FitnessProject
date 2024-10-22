@@ -2,12 +2,9 @@ package com.example.fitnessproject.screen.profile
 
 import android.content.Context
 import android.net.Uri
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,8 +25,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
@@ -62,15 +57,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import androidx.room.util.query
 import coil.compose.AsyncImage
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.BottomNavigationBar
-import com.example.fitnessproject.database.firebase.UserData
+import com.example.fitnessproject.components.ButtonComponent
+import com.example.fitnessproject.database.firebase.UserFirebase
 import com.example.fitnessproject.model.User
 import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.ui.theme.GradientEnd
@@ -88,69 +81,81 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ProfileScreen(navController: NavController) {
     val context = LocalContext.current
-    val userId = Firebase.auth.currentUser!!.uid
+    val userId = Firebase.auth.currentUser?.uid
     val user = remember { mutableStateOf<User?>(null) }
 
-    LaunchedEffect(userId) {
-        val fetchedUser = withContext(Dispatchers.IO) {
-            UserData().getUserData(userId)
+    if (userId == null) {
+        // Redirect to login screen or handle the case when the user is null
+        LaunchedEffect(Unit) {
+            navController.navigate(Routes.LOGIN) {
+                popUpTo(0) // This clears the backstack
+            }
         }
-        user.value = fetchedUser
+    } else {
+        // Fetch user data if userId is not null
+        LaunchedEffect(userId) {
+            val fetchedUser = withContext(Dispatchers.IO) {
+                UserFirebase().getUserData(userId)
+            }
+            user.value = fetchedUser
+        }
     }
 
-        var selectedItemIndex by rememberSaveable { mutableStateOf(2) }
-        // Replace Column with LazyColumn for scrollability
-        Scaffold(
-            bottomBar = {
-                BottomNavigationBar(
-                    selectedItemIndex = selectedItemIndex,
-                    onItemSelected = {
-                        selectedItemIndex = it
-                    },
-                    navController = navController
-                )
-            }
-        ) { innerPadding ->
-
-
-
-
-    if (user.value != null) {
-        // Display user data
-        Log.d("debug", "User data: ${user.value}")
-        val userdata = user.value!!
-        val coroutineScope = rememberCoroutineScope()
-
-        var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-        var firstName by remember { mutableStateOf(userdata.firstName) }
-        var lastName by remember { mutableStateOf(userdata.lastName) }
-        var weight by remember { mutableStateOf(userdata.weight.toString()) }
-        var height by remember { mutableStateOf(userdata.height.toString()) }
-        var goalWeight by remember { mutableStateOf(userdata.goalWeight.toString()) }
-        var age by remember { mutableStateOf(userdata.age.toString()) }
-        var password by remember { mutableStateOf("") }
-
-        // Edit state variables
-        var isEditingFirstName by remember { mutableStateOf(false) }
-        var isEditingLastName by remember { mutableStateOf(false) }
-        var isEditingWeight by remember { mutableStateOf(false) }
-        var isEditingGoalWeight by remember { mutableStateOf(false) }
-        var isEditingHeight by remember { mutableStateOf(false) }
-        var isEditingAge by remember { mutableStateOf(false) }
-        var isEditingPassword by remember { mutableStateOf(false) }
-
-        // Error states
-        var weightError by remember { mutableStateOf(false) }
-        var goalWeightError by remember { mutableStateOf(false) }
-        var heightError by remember { mutableStateOf(false) }
-        var ageError by remember { mutableStateOf(false) }
-
-        // Launcher for image selection
-        val launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.GetContent()
-        ) { uri: Uri? ->
-            selectedImageUri = uri
+    var selectedItemIndex by rememberSaveable { mutableStateOf(2) }
+    // Replace Column with LazyColumn for scrollability
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                selectedItemIndex = selectedItemIndex,
+                onItemSelected = {
+                    selectedItemIndex = it
+                },
+                navController = navController
+            )
         }
+    ) { innerPadding ->
+
+
+        if (user.value != null) {
+            // Display user data
+            Log.d("debug", "User data: ${user.value}")
+            val userdata = user.value!!
+            val coroutineScope = rememberCoroutineScope()
+
+            var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+            var firstName by remember { mutableStateOf(userdata.firstName) }
+            var lastName by remember { mutableStateOf(userdata.lastName) }
+            var weight by remember { mutableStateOf(userdata.weight.toString()) }
+            var height by remember { mutableStateOf(userdata.height.toString()) }
+            var goalWeight by remember { mutableStateOf(userdata.goalWeight.toString()) }
+            var age by remember { mutableStateOf(userdata.age.toString()) }
+            var password by remember { mutableStateOf("") }
+            var bmi by remember { mutableStateOf(String.format("%.2f", userdata.bmi)) }
+            var bmr by remember { mutableStateOf(userdata.bmr.toString()) }
+            var calories by remember { mutableStateOf(userdata.calories.toString()) }
+            var bwb by remember { mutableStateOf(userdata.bwb) }
+
+            // Edit state variables
+            var isEditingFirstName by remember { mutableStateOf(false) }
+            var isEditingLastName by remember { mutableStateOf(false) }
+            var isEditingWeight by remember { mutableStateOf(false) }
+            var isEditingGoalWeight by remember { mutableStateOf(false) }
+            var isEditingHeight by remember { mutableStateOf(false) }
+            var isEditingAge by remember { mutableStateOf(false) }
+            var isEditingPassword by remember { mutableStateOf(false) }
+
+            // Error states
+            var weightError by remember { mutableStateOf(false) }
+            var goalWeightError by remember { mutableStateOf(false) }
+            var heightError by remember { mutableStateOf(false) }
+            var ageError by remember { mutableStateOf(false) }
+
+            // Launcher for image selection
+            val launcher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.GetContent()
+            ) { uri: Uri? ->
+                selectedImageUri = uri
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -306,22 +311,27 @@ fun ProfileScreen(navController: NavController) {
                     )
                 }
 
-                item {
-                    EditablePasswordRow(
-                        label = "Password",
-                        value = password,
-                        isEditing = isEditingPassword,
-                        onValueChange = { password = it },
-                        onEditingChange = { isEditingPassword = it }
-                    )
-                }
+//                item {
+//                    EditablePasswordRow(
+//                        label = "Password",
+//                        value = password,
+//                        isEditing = isEditingPassword,
+//                        onValueChange = { password = it },
+//                        onEditingChange = { isEditingPassword = it }
+//                    )
+//                }
 
                 item {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
-                        Button(onClick = {
+                        ButtonComponent(
+                            value = "Save Changes",
+                            isEnabled = true,
+                            modifier = Modifier
+                                .padding(start = 8.dp),
+                        ) {
                             // Launch the coroutine when the button is clicked
                             coroutineScope.launch {
                                 updateData(
@@ -333,11 +343,11 @@ fun ProfileScreen(navController: NavController) {
                                     weight = weight,
                                     goalWeight = goalWeight
                                 )
-                            }
 
-                        }) {
-                            Text(text = "Save changes")
+                            }
                         }
+
+
                     }
                 }
                 // Statistics Section
@@ -370,8 +380,8 @@ fun ProfileScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Height", color = White, fontWeight = FontWeight.Bold)
-                                Text(height, color = White)
+                                Text("BMI", color = White, fontWeight = FontWeight.Bold)
+                                Text(bmi, color = White)
                             }
                         }
 
@@ -400,8 +410,8 @@ fun ProfileScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Current Weight", color = White, fontWeight = FontWeight.Bold)
-                                Text(weight, color = White)
+                                Text("BMR", color = White, fontWeight = FontWeight.Bold)
+                                Text(bmr, color = White)
                             }
                         }
                     }
@@ -437,8 +447,8 @@ fun ProfileScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Goal Weight", color = White, fontWeight = FontWeight.Bold)
-                                Text(goalWeight, color = White)
+                                Text("BWB", color = White, fontWeight = FontWeight.Bold)
+                                Text(bwb, color = White)
                             }
                         }
 
@@ -467,9 +477,9 @@ fun ProfileScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text("Calories Burned", color = White, fontWeight = FontWeight.Bold)
+                                Text("Calories", color = White, fontWeight = FontWeight.Bold)
                                 Text(
-                                    "500 cal",
+                                    calories,
                                     color = White
                                 ) // You can update this value based on your logic
                             }
@@ -477,14 +487,15 @@ fun ProfileScreen(navController: NavController) {
                     }
                 }
             }
+        } else {
+            // Show loading or error message
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
         }
-        else {
-        // Show loading or error message
-        Box(modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
-        }
-    }
     }
 }
 
@@ -734,7 +745,7 @@ suspend fun updateData(
     goalWeight: String
 ) {
     val success = try {
-        UserData().updateUserData(
+        UserFirebase().updateUserData(
             userId = Firebase.auth.currentUser!!.uid,
             firstName = firstName,
             lastName = lastName,
@@ -750,9 +761,9 @@ suspend fun updateData(
         false
     }
     if (success) {
-        Toast.makeText(context,"Data updated successfully", Toast.LENGTH_SHORT).show()
-    }else{
-        Toast.makeText(context,"Error updating data", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "Data updated successfully", Toast.LENGTH_SHORT).show()
+    } else {
+        Toast.makeText(context, "Error updating data", Toast.LENGTH_SHORT).show()
     }
 }
 

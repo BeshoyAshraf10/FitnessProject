@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 //import androidx.compose.material.CircularProgressIndicator
 //import androidx.compose.material.Surface
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,9 +25,9 @@ import com.example.fitnessproject.data.signup.SignupViewModel
 import com.example.fitnessproject.R
 import com.example.fitnessproject.components.*
 import com.example.fitnessproject.data.signup.SignupUIEvent
-import com.example.fitnessproject.navigation.PostOfficeAppRouter
+//import com.example.fitnessproject.navigation.PostOfficeAppRouter
 import com.example.fitnessproject.navigation.Routes
-import com.example.fitnessproject.navigation.Screen
+//import com.example.fitnessproject.navigation.Screen
 import com.example.fitnessproject.navigation.SystemBackButtonHandler
 
 
@@ -47,7 +48,7 @@ fun SignUpScreen(
                     Toast.LENGTH_SHORT
                 ).show()
                 navController.popBackStack()
-                navController.navigate(Routes.FIRST_SCREEN)
+                navController.navigate(Routes.HOME_SCREEN)
             } else if (signupViewModel.signUpError.value.isNotEmpty()) {
                 Toast.makeText(
                     context,
@@ -59,19 +60,23 @@ fun SignUpScreen(
         }
     }
     Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxSize()
     ) {
 
         Surface(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(28.dp)
         ) {
-            Column(modifier = modifier.fillMaxSize()) {
+            Column(modifier = Modifier.fillMaxSize()) {
 
-                NormalTextComponent(value = stringResource(id = R.string.hello))
+                NormalTextComponent(
+                    value = stringResource(id = R.string.hello),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 40.dp)
+                )
                 HeadingTextComponent(value = stringResource(id = R.string.create_account))
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -113,7 +118,7 @@ fun SignUpScreen(
 
                 CheckboxComponent(value = stringResource(id = R.string.terms_and_conditions),
                     onTextSelected = {
-                        PostOfficeAppRouter.navigateTo(Screen.TermsAndConditionsScreen)
+//                        PostOfficeAppRouter.navigateTo(Screen.TermsAndConditionsScreen)
                     },
                     onCheckedChange = {
                         signupViewModel.onEvent(SignupUIEvent.PrivacyPolicyCheckBoxClicked(it))
@@ -154,7 +159,7 @@ fun SignUpScreen(
 
 }
 
-@Preview
+@Preview(device = "id:pixel_6a")
 @Composable
 fun DefaultPreviewOfSignUpScreen() {
     SignUpScreen(rememberNavController())

@@ -11,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class UserData {
+class UserFirebase {
     private val database: DatabaseReference = Firebase.database.reference
     private val db = Firebase.firestore
 
@@ -32,10 +32,10 @@ class UserData {
         height: Int,
         weight: Int,
         gender: String,
-        bmi: Double,
-        bmr: Double,
-        activityLevel: String,
-        calories: Int
+        bmi: Float,
+        bmr: Int,
+        calories: Int,
+        bwb: String
     ) {
         val userData = mapOf(
             "weight" to weight,
@@ -44,8 +44,8 @@ class UserData {
             "gender" to gender,
             "bmi" to bmi,
             "bmr" to bmr,
-            "activityLevel" to activityLevel,
-            "calories" to calories
+            "calories" to calories,
+            "bwb" to bwb
         )
         db.collection("users")
             .document(userId)

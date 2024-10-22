@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.fitnessproject.components.ButtonComponent
 import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.database.localDB.DateConverter
 import com.example.fitnessproject.viewModel.ActivityViewModel
@@ -103,49 +105,49 @@ fun StartActivityScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 if (isStarted) {
-                    Button(
-                        modifier = modifier
-                            .weight(0.5f)
-                            .padding(end = 8.dp),
-                        onClick = {
-                            isPaused = !isPaused
-                            if (isPaused){ timerViewModel.pauseTimer() }
-                            else{ timerViewModel.startTimer() }
-                        }
-                    ) {
-                        Text(text = if (isPaused) "Resume" else "Pause",
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center)
-                    }
-                    Button(
-                        modifier = modifier
+                    ButtonComponent(
+                        value = if (isPaused) "Resume" else "Pause",
+                        isEnabled = true,
+                        modifier = Modifier
                             .weight(0.5f)
                             .padding(start = 8.dp),
-                        onClick = {
-                            timeEnded = Date()
-                            timerViewModel.stopTimer()
-                            navController.popBackStack()
-                            navController.navigate("${Routes.FINISH_ACTIVITY}/${timerValue}/${caloriesBurned}/${DateConverter().dateToTimestamp(timeStarted)}/${DateConverter().dateToTimestamp(timeEnded)}")
+                        onButtonClicked = {
+                            isPaused = !isPaused
+                            if (isPaused) {
+                                timerViewModel.pauseTimer()
+                            } else {
+                                timerViewModel.startTimer()
+                            }
                         }
+                    )
+                    ButtonComponent(
+                        value = "Finish",
+                        isEnabled = true,
+                        modifier = Modifier
+                            .weight(0.5f)
+                            .padding(start = 8.dp),
                     ) {
-                        Text(text = "Finish",
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center)
+                        timeEnded = Date()
+                        timerViewModel.stopTimer()
+                        navController.popBackStack()
+                        navController.navigate(
+                            "${Routes.FINISH_ACTIVITY}/${timerValue}/${caloriesBurned}/${
+                                DateConverter().dateToTimestamp(
+                                    timeStarted
+                                )
+                            }/${DateConverter().dateToTimestamp(timeEnded)}"
+                        )
                     }
-                }else{
-                    Button(
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 80.dp),
-                        onClick = {
+
+                } else {
+                    ButtonComponent(
+                        value = "Start",
+                        onButtonClicked = {
                             isStarted = true
                             timerViewModel.startTimer()
-                        }
-                    ){
-                        Text(text = "Start",
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center)
-                    }
+                        },
+                        isEnabled = true
+                    )
                 }
 
             }
@@ -159,8 +161,9 @@ fun StartActivityScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun TimerPreview() {
-//    StartActivityScreen(TimerViewModel())
+    StartActivityScreen(TimerViewModel(), rememberNavController())
 }
+
 fun Long.formatTime(): String {
     val hours = this / 3600
     val minutes = (this % 3600) / 60
@@ -171,3 +174,4 @@ fun Long.formatTime(): String {
 fun calculateCaloriesPerSecond(caloriesPerHour: Int): Double {
     return caloriesPerHour / 3600.0
 }
+

@@ -1,5 +1,6 @@
 package com.example.fitnessproject.screen.calorieCalculator
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,12 +27,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.fitnessproject.R
+import com.example.fitnessproject.components.ButtonComponent
+import com.example.fitnessproject.database.firebase.UserFirebase
+import com.example.fitnessproject.navigation.Routes
 import com.example.fitnessproject.ui.theme.TDEEBabyBlue
 import com.example.fitnessproject.ui.theme.TDEEBlue
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 @Composable
-fun CalorieCalculatorScreen2(calories: Int, bmr: Int, bmi: Float) {
+fun CalorieCalculatorScreen2(calories: Int, bmr: Int, bmi: Float, age: Int, height: Int, weight: Int, checkedOption: String,navController: NavController) {
 
     Column(
         verticalArrangement = Arrangement.Top,
@@ -39,7 +48,7 @@ fun CalorieCalculatorScreen2(calories: Int, bmr: Int, bmi: Float) {
     ) {
         Card(
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = TDEEBlue),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
             elevation = CardDefaults.cardElevation(4.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -72,7 +81,7 @@ fun CalorieCalculatorScreen2(calories: Int, bmr: Int, bmi: Float) {
             }
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 360.dp, max = 460.dp)
@@ -107,6 +116,27 @@ fun CalorieCalculatorScreen2(calories: Int, bmr: Int, bmi: Float) {
                 }
             }
         }
+                    ButtonComponent("Save data", true,modifier = Modifier
+                        .padding(top = 16.dp)
+                       ) {
+                        UserFirebase().addUserData(
+                            Firebase.auth.currentUser!!.uid,
+                            age.toInt(),
+                            height.toInt(),
+                            weight.toInt(),
+                            checkedOption.toString(),
+                            bmi,
+                            bmr,
+                            calories,
+                            BMITable(bmi)
+                        )
+                        navController.navigate(Routes.HOME_SCREEN){
+                            popUpTo(Routes.HOME_SCREEN){
+                                inclusive = true
+                            }
+                        }
+
+                    }
     }
 }
 
@@ -116,7 +146,7 @@ fun SmallCard(title: String, value: String, unit: String) {
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         modifier = Modifier.size(width = 140.dp, height = 110.dp)
     ) {
         Column(
@@ -127,7 +157,7 @@ fun SmallCard(title: String, value: String, unit: String) {
             Text(
                 text = title,
                 fontSize = 16.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontFamily = FontFamily(Font(R.font.roboto_regular)),
                 modifier = Modifier.padding(bottom = 4.dp)
             )
@@ -135,7 +165,7 @@ fun SmallCard(title: String, value: String, unit: String) {
                 text = value,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontFamily = FontFamily(Font(R.font.roboto_bold)),
                 // maxLines = 1,
                 softWrap = true,
@@ -187,9 +217,11 @@ fun BMITable(bmi: Float): String {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Composable
 private fun CaloriesScreenPreview() {
-    CalorieCalculatorScreen2(1000, 2121, 422f)
+//    CalorieCalculatorScreen2(1000, 2121, 422f)
 }
 

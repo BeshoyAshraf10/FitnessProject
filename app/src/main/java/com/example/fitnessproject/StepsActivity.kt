@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -80,7 +81,7 @@ class StepsActivity : ComponentActivity(), SensorEventListener {
                     ) {
                         Card(
                             shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
                             elevation = CardDefaults.cardElevation(4.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -150,7 +151,7 @@ class StepsActivity : ComponentActivity(), SensorEventListener {
                         }
                         Card(
                             shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = TDEEBabyBlue),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
                             elevation = CardDefaults.cardElevation(4.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -170,7 +171,7 @@ class StepsActivity : ComponentActivity(), SensorEventListener {
                                     "Time"
                                 )
                                 Stepsinfo(
-                                    R.drawable.calories,
+                                    R.drawable.calories_icon,
                                     calculateCalories(currentStepCount).toString(),
                                     "KCal",
                                     "calories"

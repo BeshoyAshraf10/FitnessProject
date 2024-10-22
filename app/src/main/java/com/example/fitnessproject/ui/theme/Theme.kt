@@ -12,26 +12,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = ThemeColors.Night.primary,
+    secondary = ThemeColors.Night.secondary,
+    onPrimary = Color.White,
+    surface = ThemeColors.Night.surface,
+    background = ThemeColors.Night.background,
+    onSurface = ThemeColors.Night.text,
+    onBackground = ThemeColors.Night.text,
+    surfaceContainer = Color(0xFF26262B)
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    primary = ThemeColors.Day.primary,
+    secondary = ThemeColors.Day.secondary,
     onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    surface = ThemeColors.Day.surface,
+    background = ThemeColors.Day.background,
+    onSurface = ThemeColors.Day.text,
+    onBackground = ThemeColors.Day.text,
+    surfaceContainer = Color(0xFFC9CBE0)
 )
+
 
 @Composable
 fun FitnessProjectTheme(
@@ -50,20 +51,27 @@ fun FitnessProjectTheme(
         else -> LightColorScheme
     }
 
+    val colors = if (!darkTheme) {
+        LightColors
+    } else {
+        DarkColors
+    }
+
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = colors,
         typography = Typography,
-        content = content
+
+        content = content,
     )
 }
 
 private val DarkColors = darkColorScheme(
-    primary = Color(0xFFBB86FC),
+    primary = Color(0xFF42A5F5),
     onPrimary = Color.Black,
     // Add other color definitions as needed
 )
 private val LightColors = lightColorScheme(
-    primary = Color(0xFF6200EE),
+    primary = Color(0xFF42A5F5),
     onPrimary = Color.White,
     // Add other color definitions as needed
 )
