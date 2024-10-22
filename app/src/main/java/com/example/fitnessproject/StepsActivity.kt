@@ -103,9 +103,7 @@ class StepsActivity : ComponentActivity(), SensorEventListener {
                                 when (val status = activityRecognitionPermission.status) {
                                     is PermissionStatus.Granted -> {
                                         // Permission is granted; register sensor listener
-                                        LaunchedEffect(Unit) {
-                                            registerSensor()
-                                        }
+                                        LaunchedEffect(Unit) { registerSensor() }
                                         Column(
                                             verticalArrangement = Arrangement.Center,
                                             horizontalAlignment = Alignment.CenterHorizontally
@@ -198,11 +196,7 @@ class StepsActivity : ComponentActivity(), SensorEventListener {
     @OptIn(ExperimentalPermissionsApi::class)
     private fun registerSensor() {
         sensor?.let {
-            sensorManager.registerListener(
-                this,
-                it,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
 
@@ -220,9 +214,6 @@ class StepsActivity : ComponentActivity(), SensorEventListener {
         super.onDestroy()
         sensorManager.unregisterListener(this)
     }
-
-
-
 }
 
 @Composable

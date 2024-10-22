@@ -98,19 +98,19 @@ fun InformationScreen(navController: NavController) {
                     fontFamily = FontFamily(Font(R.font.roboto_bold)),
                     fontSize = 32.sp
                 )
-
                 Card(
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
+
                     OutlinedInputField(
                         label = "Enter your age",
                         value = age,
                         onValueChange = { age = it })
 
-                }
+
 
                 Card(
                     shape = RoundedCornerShape(16.dp),
@@ -119,6 +119,7 @@ fun InformationScreen(navController: NavController) {
                         .fillMaxWidth()
                 )
                 {
+
                     OutlinedInputField(
                         label = "Enter your height",
                         value = height,
@@ -138,7 +139,6 @@ fun InformationScreen(navController: NavController) {
                         value = weight,
                         onValueChange = { weight = it })
 
-                }
                 Row(
                     verticalAlignment = CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround,
@@ -149,18 +149,14 @@ fun InformationScreen(navController: NavController) {
                         fontFamily = FontFamily(Font(R.font.roboto_medium)),
                         modifier = Modifier.padding(end = 16.dp)
                     )
-                    Row(verticalAlignment = CenterVertically) {
                         GenderCheckbox(
                             CheckboxOption.Male,
                             checkedOption,
                         ) { checkedOption = it }
-                    }
-                    Row(verticalAlignment = CenterVertically) {
                         GenderCheckbox(
                             CheckboxOption.Female,
                             checkedOption,
                         ) { checkedOption = it }
-                    }
                 }
 
                 Row(
