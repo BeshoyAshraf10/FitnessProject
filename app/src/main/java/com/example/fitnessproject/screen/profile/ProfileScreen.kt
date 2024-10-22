@@ -170,34 +170,34 @@ fun ProfileScreen(navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(100.dp)
-                                .clip(CircleShape)
-                                .background(Gray)
-                                .clickable { launcher.launch("image/*") }
-                        ) {
-                            if (selectedImageUri != null) {
-                                AsyncImage(
-                                    model = selectedImageUri,
-                                    contentDescription = "Profile Picture",
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.Crop
-                                )
-                            } else {
-                                FloatingActionButton(
-                                    onClick = { launcher.launch("image/*") },
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                        .size(32.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Add,
-                                        contentDescription = "Add Image"
-                                    )
-                                }
-                            }
-                        }
+//                        Box(
+//                            modifier = Modifier
+//                                .size(100.dp)
+//                                .clip(CircleShape)
+//                                .background(Gray)
+//                                .clickable { launcher.launch("image/*") }
+//                        ) {
+//                            if (selectedImageUri != null) {
+//                                AsyncImage(
+//                                    model = selectedImageUri,
+//                                    contentDescription = "Profile Picture",
+//                                    modifier = Modifier.fillMaxSize(),
+//                                    contentScale = ContentScale.Crop
+//                                )
+//                            } else {
+//                                FloatingActionButton(
+//                                    onClick = { launcher.launch("image/*") },
+//                                    modifier = Modifier
+//                                        .align(Alignment.Center)
+//                                        .size(32.dp)
+//                                ) {
+//                                    Icon(
+//                                        imageVector = Icons.Default.Add,
+//                                        contentDescription = "Add Image"
+//                                    )
+//                                }
+//                            }
+//                        }
 
                         Text(
                             text = "Hello, $firstName",
