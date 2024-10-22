@@ -112,86 +112,92 @@ fun InformationScreen(navController: NavController) {
 
 
 
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                {
-
-                    OutlinedInputField(
-                        label = "Enter your height",
-                        value = height,
-                        onValueChange = { height = it })
-
-                }
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 6.dp)
-                ) {
-
-                    OutlinedInputField(
-                        label = "Enter your Weight",
-                        value = weight,
-                        onValueChange = { weight = it })
-
-                Row(
-                    verticalAlignment = CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Gender",
-                        fontFamily = FontFamily(Font(R.font.roboto_medium)),
-                        modifier = Modifier.padding(end = 16.dp)
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                        modifier = Modifier
+                            .fillMaxWidth()
                     )
-                        GenderCheckbox(
-                            CheckboxOption.Male,
-                            checkedOption,
-                        ) { checkedOption = it }
-                        GenderCheckbox(
-                            CheckboxOption.Female,
-                            checkedOption,
-                        ) { checkedOption = it }
-                }
+                    {
 
-                Row(
-                    verticalAlignment = CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = "Activity Level",
-                        fontFamily = FontFamily(Font(R.font.roboto_medium)),
-                        modifier = Modifier.padding(end = 8.dp)
-                    )
-                    ExposedDropdownMenuBox(
-                        expanded = isExpanded,
-                        onExpandedChange = { isExpanded = !isExpanded }
+                        OutlinedInputField(
+                            label = "Enter your height",
+                            value = height,
+                            onValueChange = { height = it })
+
+                    }
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 6.dp)
                     ) {
-                        TextField(
-                            value = selectedItem,
-                            onValueChange = {},
-                            readOnly = true,
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = !isExpanded) },
-                            modifier = Modifier.menuAnchor()
-                        )
-                        ExposedDropdownMenu(
-                            expanded = isExpanded,
-                            onDismissRequest = { isExpanded = false }
+
+                        OutlinedInputField(
+                            label = "Enter your Weight",
+                            value = weight,
+                            onValueChange = { weight = it })
+
+                        Row(
+                            verticalAlignment = CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            options.forEachIndexed { index, text ->
-                                DropdownMenuItem(
-                                    text = { Text(text = text) },
-                                    onClick = {
-                                        selectedItem = options[index]
-                                        isExpanded = false
+                            Text(
+                                text = "Gender",
+                                fontFamily = FontFamily(Font(R.font.roboto_medium)),
+                                modifier = Modifier.padding(end = 16.dp)
+                            )
+                            GenderCheckbox(
+                                CheckboxOption.Male,
+                                checkedOption,
+                            ) { checkedOption = it }
+                            GenderCheckbox(
+                                CheckboxOption.Female,
+                                checkedOption,
+                            ) { checkedOption = it }
+                        }
+
+                        Row(
+                            verticalAlignment = CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "Activity Level",
+                                fontFamily = FontFamily(Font(R.font.roboto_medium)),
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            ExposedDropdownMenuBox(
+                                expanded = isExpanded,
+                                onExpandedChange = { isExpanded = !isExpanded }
+                            ) {
+                                TextField(
+                                    value = selectedItem,
+                                    onValueChange = {},
+                                    readOnly = true,
+                                    trailingIcon = {
+                                        ExposedDropdownMenuDefaults.TrailingIcon(
+                                            expanded = !isExpanded
+                                        )
                                     },
-                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                    modifier = Modifier.menuAnchor()
                                 )
+                                ExposedDropdownMenu(
+                                    expanded = isExpanded,
+                                    onDismissRequest = { isExpanded = false }
+                                ) {
+                                    options.forEachIndexed { index, text ->
+                                        DropdownMenuItem(
+                                            text = { Text(text = text) },
+                                            onClick = {
+                                                selectedItem = options[index]
+                                                isExpanded = false
+                                            },
+                                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
